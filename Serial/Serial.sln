@@ -1,0 +1,45 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloWorld", "HelloWorld\HelloWorld.vcxproj", "{751BB142-E336-164C-F5DF-EB04AB0BCD0E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Listener", "Listener\Listener.vcxproj", "{66CFDC87-CA95-251E-6B29-EBDCA9DE957A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlapped", "Overlapped\Overlapped.vcxproj", "{9D80CF84-03FD-EC0E-20ED-2223EBC8CD92}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serial", "Serial\Serial.vcxproj", "{EF83C119-83B6-F7B6-66F9-D65640010417}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialTestMFC", "SerialTestMFC\SerialTestMFC.vcxproj", "{4A96052F-4800-26FA-A545-70683A0C3BCE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Unicode|Win32 = Debug Unicode|Win32
+		Debug|Win32 = Debug|Win32
+		Release Unicode|Win32 = Release Unicode|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{751BB142-E336-164C-F5DF-EB04AB0BCD0E}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{751BB142-E336-164C-F5DF-EB04AB0BCD0E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{751BB142-E336-164C-F5DF-EB04AB0BCD0E}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{751BB142-E336-164C-F5DF-EB04AB0BCD0E}.Release|Win32.ActiveCfg = Release|Win32
+		{66CFDC87-CA95-251E-6B29-EBDCA9DE957A}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{66CFDC87-CA95-251E-6B29-EBDCA9DE957A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{66CFDC87-CA95-251E-6B29-EBDCA9DE957A}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{66CFDC87-CA95-251E-6B29-EBDCA9DE957A}.Release|Win32.ActiveCfg = Release|Win32
+		{9D80CF84-03FD-EC0E-20ED-2223EBC8CD92}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{9D80CF84-03FD-EC0E-20ED-2223EBC8CD92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9D80CF84-03FD-EC0E-20ED-2223EBC8CD92}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{9D80CF84-03FD-EC0E-20ED-2223EBC8CD92}.Release|Win32.ActiveCfg = Release|Win32
+		{EF83C119-83B6-F7B6-66F9-D65640010417}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{EF83C119-83B6-F7B6-66F9-D65640010417}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF83C119-83B6-F7B6-66F9-D65640010417}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{EF83C119-83B6-F7B6-66F9-D65640010417}.Release|Win32.ActiveCfg = Release|Win32
+		{4A96052F-4800-26FA-A545-70683A0C3BCE}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{4A96052F-4800-26FA-A545-70683A0C3BCE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4A96052F-4800-26FA-A545-70683A0C3BCE}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{4A96052F-4800-26FA-A545-70683A0C3BCE}.Release|Win32.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
