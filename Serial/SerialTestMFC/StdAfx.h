@@ -4,7 +4,7 @@
 
 // Windows version definition
 #ifndef WINVER
-#define WINVER	0x0400
+#define WINVER	0x0601
 #endif
 
 
