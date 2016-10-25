@@ -4,3 +4,5 @@
 /Serial/_Intermediate
 /Serial/_Output
 /Serial/ipch
+/_Output/Release/*.map
+/Serial/SerialTestMFC/*.aps
