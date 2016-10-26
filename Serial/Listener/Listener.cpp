@@ -42,12 +42,12 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 	LONG    lLastError = ERROR_SUCCESS;
 
     // Attempt to open the serial port (COM1)
-    lLastError = serial.Open(_T("COM1"),0,0,false);
+    lLastError = serial.Open(_T("COM3"),0,0,false);
 	if (lLastError != ERROR_SUCCESS)
 		return ::ShowError(serial.GetLastError(), _T("Unable to open COM-port"));
 
     // Setup the serial port (9600,8N1, which is the default setting)
-    lLastError = serial.Setup(CSerial::EBaud9600,CSerial::EData8,CSerial::EParNone,CSerial::EStop1);
+    lLastError = serial.Setup(CSerial::EBaud115200,CSerial::EData8,CSerial::EParNone,CSerial::EStop1);
 	if (lLastError != ERROR_SUCCESS)
 		return ::ShowError(serial.GetLastError(), _T("Unable to set COM-port setting"));
 
@@ -71,6 +71,10 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 
     // Keep reading data, until an EOF (CTRL-Z) has been received
 	bool fContinue = true;
+	int nCountEventRecv = 0;
+	int nCountRead = 0;
+	int nCountReadBytesPerEvent = 0;
+	int nCountReadBytesAll = 0;
 	do
 	{
 		// Wait for an event
@@ -135,7 +139,7 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 		{
 			// Read data, until there is nothing left
 			DWORD dwBytesRead = 0;
-			char szBuffer[101];
+			char szBuffer[2000];
 			do
 			{
 				// Read data from the COM-port
@@ -155,12 +159,19 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 					if (strchr(szBuffer,EOF_Char))
 						fContinue = false;
 				}
+				printf("nCountRead=%d, Read %d Bytes \n", ++nCountRead, dwBytesRead);
+				nCountReadBytesPerEvent += dwBytesRead;
 			}
 		    while (dwBytesRead == sizeof(szBuffer)-1);
+			
+			printf("nCountEventRecv=%d, Read %d Bytes \n\n", ++nCountEventRecv, nCountReadBytesPerEvent);
+			nCountReadBytesAll += nCountReadBytesPerEvent;
+			nCountReadBytesPerEvent = 0;
 		}
 	}
 	while (fContinue);
 
+	printf("Read %d Bytes All\n", nCountReadBytesAll);
     // Close the port again
     serial.Close();
     return 0;
