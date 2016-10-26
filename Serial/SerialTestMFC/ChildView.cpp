@@ -91,6 +91,8 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return 0;
 	}
 
+	m_serial.SetEventChar( '\n' );
+
 	// Set the serial port in the RichCommEdit control
 	m_wndEdit.m_pSerial = &m_serial;
 	return 0;
@@ -109,7 +111,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 {
 	CSerial::EEvent eEvent = CSerial::EEvent(LOWORD(wParam));
 	CSerial::EError eError = CSerial::EError(HIWORD(wParam));
-
+#if 0
 	if (eError)
 		DisplayEvent(_T("An internal error occurred."));
 
@@ -136,8 +138,8 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 	
 	if (eEvent & CSerial::EEventRLSD)
 		DisplayEventSetting(_T("RLSD signal change"), _T("RLSD"), m_serial.GetRLSD());
-	
-	if (eEvent & CSerial::EEventRecv)
+#endif
+	if (eEvent & CSerial::EEventRcvEv)
 	{
 		// Create a clean buffer
 		DWORD dwRead;
