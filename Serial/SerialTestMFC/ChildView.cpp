@@ -149,7 +149,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 		{
 			m_serial.Read(szData,nBuflen,&dwRead);
 			szData[dwRead] = '\0';
-
+#if 0
 			// Scan the string for unwanted characters
 			for (DWORD dwChar=0; dwChar<dwRead; dwChar++)
 			{
@@ -158,7 +158,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 					szData[dwChar] = '.';
 				}
 			}
-
+#endif
 #ifdef _UNICODE
 			// Convert the ANSI data to Unicode
 			LPTSTR lpszData = LPTSTR(_alloca((dwRead+1)*sizeof(TCHAR)));

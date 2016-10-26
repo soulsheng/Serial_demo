@@ -43,12 +43,13 @@ BOOL CComSelectDlg::OnInitDialog()
 {
 	// Call base class
 	CDialog::OnInitDialog();
-	
+#if 0
 	// Enable only existing COM-ports
 	GetDlgItem(IDC_COM1)->EnableWindow(CSerial::CheckPort(_T("COM1")) == CSerial::EPortAvailable);
 	GetDlgItem(IDC_COM2)->EnableWindow(CSerial::CheckPort(_T("COM2")) == CSerial::EPortAvailable);
 	GetDlgItem(IDC_COM3)->EnableWindow(CSerial::CheckPort(_T("COM3")) == CSerial::EPortAvailable);
 	GetDlgItem(IDC_COM4)->EnableWindow(CSerial::CheckPort(_T("COM4")) == CSerial::EPortAvailable);
+#endif
 	return TRUE;
 }
 
@@ -59,6 +60,9 @@ void CComSelectDlg::OnOK (void)
 
 	// Generate the COM port string
 	m_strComPort.Format(_T("COM%d"), m_nComIndex+1);
+
+	if( CSerial::CheckPort( m_strComPort ) != CSerial::EPortAvailable )
+		AfxMessageBox(m_strComPort);
 
 	// Call base class
 	CDialog::OnOK();
