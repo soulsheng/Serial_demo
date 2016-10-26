@@ -62,6 +62,8 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 	if (lLastError != ERROR_SUCCESS)
 		return ::ShowError(serial.GetLastError(), _T("Unable to set COM-port event mask"));
 
+	serial.SetEventChar( '\n' );
+
 	// Use 'non-blocking' reads, because we don't know how many bytes
 	// will be received. This is normally the most convenient mode
 	// (and also the default mode for reading data).
@@ -135,11 +137,11 @@ int __cdecl _tmain (int /*argc*/, char** /*argv*/)
 		}
 
 		// Handle data receive event
-		if (eEvent & CSerial::EEventRecv)
+		if (eEvent & CSerial::EEventRcvEv)
 		{
 			// Read data, until there is nothing left
 			DWORD dwBytesRead = 0;
-			char szBuffer[2000];
+			char szBuffer[101];
 			do
 			{
 				// Read data from the COM-port
