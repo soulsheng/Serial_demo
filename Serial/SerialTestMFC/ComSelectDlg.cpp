@@ -26,7 +26,7 @@ CComSelectDlg::CComSelectDlg(CWnd* pParent /*=0*/)
 	: CDialog(CComSelectDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CComSelectDlg)
-	m_nComIndex = 0;
+	m_nComIndex = 2;
 	//}}AFX_DATA_INIT
 }
 
