@@ -90,7 +90,11 @@ void StringParser::parseValueFromString( std::string& str )
 	str = m_strLeft + str;
 
 	parsePositionValueFromString( str );
-	parseAngleValueFromString( m_strLeft );
+
+	nIndexFind = m_strLeft.find_last_of("\r\n");
+
+	if( nIndexFind != -1)
+		parseAngleValueFromString( m_strLeft );
 
 	char buf[256];
 
