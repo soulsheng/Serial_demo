@@ -29,6 +29,7 @@ BEGIN_MESSAGE_MAP(CChildView,CWnd)
 	ON_WM_SETFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_SERIAL(OnSerialMsg)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -92,6 +93,7 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	m_serial.SetEventChar( '\n' );
+	SetTimer(0, 100, NULL);
 
 	// Set the serial port in the RichCommEdit control
 	m_wndEdit.m_pSerial = &m_serial;
@@ -171,7 +173,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 			DisplayData(lpszData);
 #else
 			// Display the fetched string
-			DisplayData(szData);
+			m_lineBuffer.push_back( std::string(szData) );
 #endif
 		} while (dwRead == nBuflen);
 	}
@@ -275,4 +277,20 @@ void CChildView::OnSetFocus(CWnd* pOldWnd)
 	
 	// Pass focus to edit-window
 	m_wndEdit.SetFocus();
+}
+
+
+void CChildView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if ( !m_lineBuffer.empty() )
+	{
+		std::string strShow = m_lineBuffer.front();
+		m_lineBuffer.pop_front();
+
+		DisplayData( (LPCTSTR)strShow.c_str() );
+		DisplayData("\n\n");
+	}
+
+	CWnd::OnTimer(nIDEvent);
 }

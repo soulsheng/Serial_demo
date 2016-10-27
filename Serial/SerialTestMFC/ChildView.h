@@ -8,6 +8,8 @@
 #include "SerialMFC.h"
 #include "RichCommEdit.h"
 
+#include <deque>
+#include <string>
 
 /////////////////////////////////////////////////////////////////////////////
 // CChildView window
@@ -23,6 +25,8 @@ public:
 	// Attributes
 	CRichCommEdit	m_wndEdit;
 	CSerialMFC		m_serial;
+	
+	std::deque<std::string>		m_lineBuffer;
 
 public:
 	// Overrides
@@ -54,6 +58,8 @@ protected:
 	void DisplayData (LPCTSTR pszData);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 
