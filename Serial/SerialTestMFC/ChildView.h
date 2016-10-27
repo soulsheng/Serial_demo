@@ -11,6 +11,8 @@
 #include <deque>
 #include <string>
 
+#include "StringParser.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CChildView window
 
@@ -27,6 +29,8 @@ public:
 	CSerialMFC		m_serial;
 	
 	std::deque<std::string>		m_lineBuffer;
+	
+	StringParser	m_parser;
 
 public:
 	// Overrides

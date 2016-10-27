@@ -288,6 +288,8 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 		std::string strShow = m_lineBuffer.front();
 		m_lineBuffer.pop_front();
 
+		//m_parser.parseValueFromString( strShow );
+
 		DisplayData( (LPCTSTR)strShow.c_str() );
 		DisplayData("\n\n");
 	}
