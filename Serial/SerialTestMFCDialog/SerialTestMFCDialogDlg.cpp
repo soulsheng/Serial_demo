@@ -11,6 +11,7 @@
 #define new DEBUG_NEW
 #endif
 
+#include "Serial.h"
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -50,6 +51,11 @@ END_MESSAGE_MAP()
 
 CSerialTestMFCDialogDlg::CSerialTestMFCDialogDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CSerialTestMFCDialogDlg::IDD, pParent)
+	, m_nIndexPort(0)
+	, m_nIndexBaudRate(0)
+	, m_nIndexByteType(0)
+	, m_nIndexParityType(0)
+	, m_nIndexStopBits(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -57,6 +63,12 @@ CSerialTestMFCDialogDlg::CSerialTestMFCDialogDlg(CWnd* pParent /*=NULL*/)
 void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_COMBO_PORT, m_comboPort);
+	DDX_CBIndex(pDX, IDC_COMBO_PORT, m_nIndexPort);
+	DDX_CBIndex(pDX, IDC_COMBO_BAUDRATE, m_nIndexBaudRate);
+	DDX_CBIndex(pDX, IDC_COMBO_BYTE, m_nIndexByteType);
+	DDX_CBIndex(pDX, IDC_COMBO_PARITY, m_nIndexParityType);
+	DDX_CBIndex(pDX, IDC_COMBO_STOP, m_nIndexStopBits);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -98,6 +110,8 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	setDefault();
+	UpdateData( FALSE );
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -149,5 +163,13 @@ void CSerialTestMFCDialogDlg::OnPaint()
 HCURSOR CSerialTestMFCDialogDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CSerialTestMFCDialogDlg::setDefault()
+{
+	m_nIndexBaudRate = CSerial::EBaud115200;
+	m_nIndexByteType = CSerial::EData8;
+	m_nIndexParityType = CSerial::EParNone;
+	m_nIndexStopBits = CSerial::EStop1;
 }
 

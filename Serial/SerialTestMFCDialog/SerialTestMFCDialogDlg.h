@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
 
 // CSerialTestMFCDialogDlg 对话框
@@ -29,4 +30,19 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+	void	setDefault();
+
+public:
+	CComboBox m_comboPort;
+	// 端口索引，0对应COM1
+	int m_nIndexPort;
+	// 波特率类型索引
+	int m_nIndexBaudRate;
+	// 数据位类型索引
+	int m_nIndexByteType;
+	// 校验类型索引
+	int m_nIndexParityType;
+	// 停止位类型索引
+	int m_nIndexStopBits;
 };
