@@ -6,3 +6,8 @@
 /Serial/ipch
 /_Output/Release/*.map
 /Serial/SerialTestMFC/*.aps
+/Serial/SerialTestMFCDialog/*.sdf
+/Serial/SerialTestMFCDialog/*.suo
+/Serial/SerialTestMFCDialog/*.aps
+/Serial/SerialTestMFCDialog/Release
+/Serial/SerialTestMFCDialog/Debug
