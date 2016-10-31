@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialTestMFC", "SerialTestMFC\SerialTestMFC.vcxproj", "{4A96052F-4800-26FA-A545-70683A0C3BCE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SerialTestMFCDialog", "SerialTestMFCDialog\SerialTestMFCDialog.vcxproj", "{E701025F-A5E3-4EDE-BA65-331B6D073B52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EF83C119-83B6-F7B6-66F9-D65640010417} = {EF83C119-83B6-F7B6-66F9-D65640010417}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

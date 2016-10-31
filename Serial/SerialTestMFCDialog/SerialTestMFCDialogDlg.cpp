@@ -75,6 +75,8 @@ BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON_COM_OPEN, &CSerialTestMFCDialogDlg::OnBnClickedButtonComOpen)
+	ON_BN_CLICKED(IDC_BUTTON_COM_SET, &CSerialTestMFCDialogDlg::OnBnClickedButtonComSet)
 END_MESSAGE_MAP()
 
 
@@ -174,3 +176,108 @@ void CSerialTestMFCDialogDlg::setDefault()
 	m_nIndexPort = 2;						// COM3
 }
 
+
+
+void CSerialTestMFCDialogDlg::OnBnClickedButtonComOpen()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(true);
+
+	// format com port string, eg. COM3
+	m_comboPort.GetLBText( m_nIndexPort, m_strPort );
+
+	// 检测是否已经打开， 避免重复
+	if ( m_serial.IsOpen() )
+	{
+		CString str( m_strPort );
+		str += " is Opened" ;
+		AfxMessageBox( str,MB_ICONSTOP|MB_OK);
+		return;
+	}
+
+	// Open the serial port
+	if (m_serial.Open(m_strPort.GetBuffer(),this) != ERROR_SUCCESS)
+	{
+		AfxMessageBox(_T("Unable to open COM-port"),MB_ICONSTOP|MB_OK);
+		GetParent()->PostMessage(WM_CLOSE);
+		return ;
+	}
+	else
+	{
+		CString str( m_strPort );
+		str += " is Opened" ;
+		AfxMessageBox( str,MB_OK);
+	}
+
+	m_serial.SetEventChar( '\n' );
+
+}
+
+
+void CSerialTestMFCDialogDlg::OnBnClickedButtonComSet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(true);
+
+	// Determine baudrate
+	CSerial::EBaudrate eBaudrate = CSerial::EBaudUnknown;
+	switch (m_nIndexBaudRate)
+	{
+	case 0:  eBaudrate = CSerial::EBaud110;   break;
+	case 1:  eBaudrate = CSerial::EBaud300;   break;
+	case 2:  eBaudrate = CSerial::EBaud600;   break;
+	case 3:  eBaudrate = CSerial::EBaud1200;   break;
+	case 4:  eBaudrate = CSerial::EBaud2400;   break;
+	case 5:  eBaudrate = CSerial::EBaud4800;   break;
+	case 6:  eBaudrate = CSerial::EBaud9600;   break;
+	case 7:  eBaudrate = CSerial::EBaud14400;  break;
+	case 8:  eBaudrate = CSerial::EBaud19200;  break;
+	case 9:  eBaudrate = CSerial::EBaud38400;  break;
+	case 10:  eBaudrate = CSerial::EBaud56000;  break;
+	case 11:  eBaudrate = CSerial::EBaud57600;  break;
+	case 12:  eBaudrate = CSerial::EBaud115200; break;
+	case 13:  eBaudrate = CSerial::EBaud128000; break;
+	case 14:  eBaudrate = CSerial::EBaud256000; break;
+	default: ASSERT(false); break;
+	}
+
+	CSerial::EDataBits eDataBits = CSerial::EDataUnknown;
+	switch (m_nIndexByteType)
+	{
+	case 0:  eDataBits = CSerial::EData5; break;
+	case 1:  eDataBits = CSerial::EData6; break;
+	case 2:  eDataBits = CSerial::EData7; break;
+	case 3:  eDataBits = CSerial::EData8; break;
+	}
+
+	CSerial::EParity eParity = CSerial::EParUnknown;
+	switch (m_nIndexParityType)
+	{
+	case 0: eParity = CSerial::EParNone;  break;
+	case 1: eParity = CSerial::EParOdd;   break;
+	case 2: eParity = CSerial::EParEven;  break;
+	case 3: eParity = CSerial::EParMark;  break;
+	case 4: eParity = CSerial::EParSpace; break;
+	default: ASSERT(false); break;
+	}
+
+	CSerial::EStopBits eStopBits = CSerial::EStopUnknown;
+	switch (m_nIndexStopBits)
+	{
+	case 0: eStopBits = CSerial::EStop1;   break;
+	case 1: eStopBits = CSerial::EStop1_5; break;
+	case 2: eStopBits = CSerial::EStop2;   break;
+	default: ASSERT(false); break;
+	}
+
+
+	// Setup the COM port
+	if (m_serial.Setup(eBaudrate,eDataBits,eParity,eStopBits))
+		AfxMessageBox(_T("Failed to Setup the COM port!"),MB_ICONSTOP|MB_OK);
+	else
+	{
+		CString str( m_strPort );
+		str += " setup ok" ;
+		AfxMessageBox( str,MB_OK);
+	}
+}

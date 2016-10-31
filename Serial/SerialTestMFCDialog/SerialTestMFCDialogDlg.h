@@ -5,6 +5,7 @@
 #pragma once
 #include "afxwin.h"
 
+#include "SerialMFC.h"
 
 // CSerialTestMFCDialogDlg 对话框
 class CSerialTestMFCDialogDlg : public CDialogEx
@@ -45,4 +46,10 @@ public:
 	int m_nIndexParityType;
 	// 停止位类型索引
 	int m_nIndexStopBits;
+
+	CSerialMFC		m_serial;
+	CString			m_strPort;		// com port string, eg. COM3
+
+	afx_msg void OnBnClickedButtonComOpen();
+	afx_msg void OnBnClickedButtonComSet();
 };
