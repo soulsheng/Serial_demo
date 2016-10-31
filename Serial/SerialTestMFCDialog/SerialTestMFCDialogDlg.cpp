@@ -56,6 +56,11 @@ CSerialTestMFCDialogDlg::CSerialTestMFCDialogDlg(CWnd* pParent /*=NULL*/)
 	, m_nIndexByteType(0)
 	, m_nIndexParityType(0)
 	, m_nIndexStopBits(0)
+	, m_strGPSPositionX(_T(""))
+	, m_strGPSPositionY(_T(""))
+	, m_strGPSPositionZ(_T(""))
+	, m_strGPSAngle(_T(""))
+	, m_strGroupBoxCom1ST(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -69,6 +74,11 @@ void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_COMBO_BYTE, m_nIndexByteType);
 	DDX_CBIndex(pDX, IDC_COMBO_PARITY, m_nIndexParityType);
 	DDX_CBIndex(pDX, IDC_COMBO_STOP, m_nIndexStopBits);
+	DDX_Text(pDX, IDC_STATI_GPS_POSITIONX, m_strGPSPositionX);
+	DDX_Text(pDX, IDC_STATI_GPS_POSITIONY, m_strGPSPositionY);
+	DDX_Text(pDX, IDC_STATI_GPS_POSITIONZ, m_strGPSPositionZ);
+	DDX_Text(pDX, IDC_STATIC_GPS_ANGLE, m_strGPSAngle);
+	DDX_Text(pDX, IDC_GROUP_BOX_COM_1ST, m_strGroupBoxCom1ST);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -77,6 +87,11 @@ BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_COM_OPEN, &CSerialTestMFCDialogDlg::OnBnClickedButtonComOpen)
 	ON_BN_CLICKED(IDC_BUTTON_COM_SET, &CSerialTestMFCDialogDlg::OnBnClickedButtonComSet)
+
+	ON_WM_SERIAL(OnSerialMsg)
+
+	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BUTTON_COM_READ, &CSerialTestMFCDialogDlg::OnBnClickedButtonComRead)
 END_MESSAGE_MAP()
 
 
@@ -174,9 +189,49 @@ void CSerialTestMFCDialogDlg::setDefault()
 	m_nIndexParityType = 0;					// CSerial::EParNone;
 	m_nIndexStopBits = 0;					// CSerial::EStop1;
 	m_nIndexPort = 2;						// COM3
+
+	m_bStartRead = false;
+
+	SetTimer(0, 100, NULL);		// create a timer named '0'
+
 }
 
 
+
+void CSerialTestMFCDialogDlg::DisplayData( LPCTSTR pszData )
+{
+	if( !m_parser.isFrameValid() )
+		return;
+
+	vgKernel::StringVector* pStrVec;
+	
+	if( FRAME_POSITION == m_parser.getFrameType() )
+	{
+		pStrVec = m_parser.getStringVectorPosition( );
+		if( pStrVec->size() >= 9 )
+		{
+			m_strGPSPositionX = (*pStrVec)[1].c_str() ;		m_strGPSPositionX += " ";
+			m_strGPSPositionX += (*pStrVec)[2].c_str() ;
+			m_strGPSPositionZ = (*pStrVec)[3].c_str() ;		m_strGPSPositionZ += " ";
+			m_strGPSPositionZ += (*pStrVec)[4].c_str() ;
+			m_strGPSPositionY = (*pStrVec)[8].c_str() ;
+		}
+	}
+
+	if( FRAME_ANGLE == m_parser.getFrameType() )
+	{
+		pStrVec = m_parser.getStringVectorAngle( );
+		if( pStrVec->size() >= 8 )
+		{
+			m_strGPSAngle = (*pStrVec)[1].c_str() ;		m_strGPSAngle += ", ";
+			m_strGPSAngle += (*pStrVec)[3].c_str() ;	m_strGPSAngle += ", ";
+			m_strGPSAngle += (*pStrVec)[7].c_str() ;
+		}
+	}
+
+
+	UpdateData( FALSE );
+}
 
 void CSerialTestMFCDialogDlg::OnBnClickedButtonComOpen()
 {
@@ -209,7 +264,10 @@ void CSerialTestMFCDialogDlg::OnBnClickedButtonComOpen()
 		AfxMessageBox( str,MB_OK);
 	}
 
-	m_serial.SetEventChar( '\n' );
+	m_serial.SetEventChar( '\n' );	// register event EEventRcvEv
+
+	m_strGroupBoxCom1ST = m_strPort;
+	UpdateData( FALSE );
 
 }
 
@@ -280,4 +338,59 @@ void CSerialTestMFCDialogDlg::OnBnClickedButtonComSet()
 		str += " setup ok" ;
 		AfxMessageBox( str,MB_OK);
 	}
+}
+
+LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
+{
+	if ( !m_bStartRead )
+		return 0;
+
+	CSerial::EEvent eEvent = CSerial::EEvent(LOWORD(wParam));
+	CSerial::EError eError = CSerial::EError(HIWORD(wParam));
+
+	if (eEvent & CSerial::EEventRcvEv)
+	{
+		// Create a clean buffer
+		DWORD dwRead;
+		char szData[101];
+		const int nBuflen = sizeof(szData)-1;
+
+		// Obtain the data from the serial port
+		do
+		{
+			m_serial.Read(szData,nBuflen,&dwRead);
+			szData[dwRead] = '\0';
+			m_lineBuffer.push_back( std::string(szData) );
+
+		} while (dwRead == nBuflen);
+	}
+
+	return 0;
+}
+
+
+void CSerialTestMFCDialogDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if ( !m_lineBuffer.empty() )
+	{
+		std::string strShow = m_lineBuffer.front();
+		m_lineBuffer.pop_front();
+
+		m_parser.parseValueFromString( strShow );
+
+		DisplayData( (LPCTSTR)strShow.c_str() );
+	}
+
+	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CSerialTestMFCDialogDlg::OnBnClickedButtonComRead()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	m_bStartRead = true;
+
+	m_serial.Purge();	// 清空端口缓存中已经累积的数据
 }

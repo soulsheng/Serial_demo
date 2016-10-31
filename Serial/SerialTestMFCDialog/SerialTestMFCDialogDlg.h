@@ -6,6 +6,10 @@
 #include "afxwin.h"
 
 #include "SerialMFC.h"
+#include "StringParser.h"
+
+#include <deque>
+#include <string>
 
 // CSerialTestMFCDialogDlg ¶Ô»°¿ò
 class CSerialTestMFCDialogDlg : public CDialogEx
@@ -33,6 +37,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	void	setDefault();
+	void	DisplayData (LPCTSTR pszData);
 
 public:
 	CComboBox m_comboPort;
@@ -49,7 +54,22 @@ public:
 
 	CSerialMFC		m_serial;
 	CString			m_strPort;		// com port string, eg. COM3
+	std::deque<std::string>		m_lineBuffer;
+	StringParser	m_parser;
+	bool			m_bStartRead;	// start to read or not 
+
+	CString m_strGPSPositionX;
+	CString m_strGPSPositionY;
+	CString m_strGPSPositionZ;
 
 	afx_msg void OnBnClickedButtonComOpen();
 	afx_msg void OnBnClickedButtonComSet();
+
+	afx_msg LRESULT OnSerialMsg (WPARAM wParam, LPARAM lParam);
+
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnBnClickedButtonComRead();
+
+	CString m_strGPSAngle;
+	CString m_strGroupBoxCom1ST;
 };

@@ -2,8 +2,6 @@
 #include "StdAfx.h"
 #include "StringParser.h"
 
-#include "vgkStringUtility.h"
-using namespace vgKernel;
 
 
 StringParser::StringParser()
@@ -29,13 +27,15 @@ void StringParser::parseAngleValueFromString( std::string str )
 	int nIndexFindEnd = str.find_last_of("\r\n");
 
 	std::string strSub = str.substr( 0, nIndexFindEnd );
+	
+	m_strVecAngle.clear();
 
-	StringVector strVec = StringUtility::tokenize( strSub, "," );
-	if( strVec.size() >= 8 )
+	m_strVecAngle = StringUtility::tokenize( strSub, "," );
+	if( m_strVecAngle.size() >= 8 )
 	{
-		m_fAngle[0] = atof( strVec[1].c_str() );
-		m_fAngle[1] = atof( strVec[3].c_str() );
-		m_fAngle[2] = atof( strVec[7].c_str() );
+		m_fAngle[0] = atof( m_strVecAngle[1].c_str() );
+		m_fAngle[1] = atof( m_strVecAngle[3].c_str() );
+		m_fAngle[2] = atof( m_strVecAngle[7].c_str() );
 	}
 
 
@@ -63,15 +63,17 @@ void StringParser::parsePositionValueFromString( std::string& str )
 
 	std::string strSub = str.substr( 0, nIndexFindEnd );
 
-	StringVector strVec = StringUtility::tokenize( strSub, "," );
-	if( strVec.size() >= 9 )
-	{
-		m_fPosition[0] = atof( strVec[1].c_str() );
-		m_fPosition[1] = atof( strVec[3].c_str() );
-		m_fPosition[2] = atof( strVec[8].c_str() );
+	m_strVecPosition.clear();
 
-		m_cDirection[0] = strVec[2].at(0);
-		m_cDirection[1] = strVec[4].at(0);
+	m_strVecPosition = StringUtility::tokenize( strSub, "," );
+	if( m_strVecPosition.size() >= 9 )
+	{
+		m_fPosition[0] = atof( m_strVecPosition[1].c_str() );
+		m_fPosition[1] = atof( m_strVecPosition[3].c_str() );
+		m_fPosition[2] = atof( m_strVecPosition[8].c_str() );
+
+		m_cDirection[0] = m_strVecPosition[2].at(0);
+		m_cDirection[1] = m_strVecPosition[4].at(0);
 	}
 
 	if ( str.size() > strSub.size()+2 )	// strSub have no "\r\n"
@@ -82,6 +84,8 @@ void StringParser::parsePositionValueFromString( std::string& str )
 
 void StringParser::parseValueFromString( std::string& str )
 {
+	m_bFrameTypeCurrent = FRAME_NULL;
+
 	int nIndexFind = str.find_last_of("\r\n");
 
 	if( nIndexFind == -1)
@@ -107,4 +111,35 @@ void StringParser::parseValueFromString( std::string& str )
 
 	if ( FRAME_NULL != m_bFrameTypeCurrent )
 		str = buf;
+}
+
+float* StringParser::getPosition( char *pDir )
+{
+	strcpy_s( pDir, 2, m_cDirection );
+	return m_fPosition;
+}
+
+float* StringParser::getAngle()
+{
+	return m_fAngle;
+}
+
+vgKernel::StringVector* StringParser::getStringVectorPosition()
+{
+	return &m_strVecPosition;
+}
+
+vgKernel::StringVector* StringParser::getStringVectorAngle()
+{
+	return &m_strVecAngle;
+}
+
+FRAME_TYPE StringParser::getFrameType()
+{
+	return m_bFrameTypeCurrent;
+}
+
+bool StringParser::isFrameValid()
+{
+	return m_bFrameTypeCurrent != FRAME_NULL;
 }

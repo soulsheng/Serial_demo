@@ -53,7 +53,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Serial</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Serial;..\common;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,6 +104,8 @@
     <None Include="res\SerialTestMFCDialog.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\StringParser.h" />
+    <ClInclude Include="..\common\vgkStringUtility.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SerialTestMFCDialog.h" />
     <ClInclude Include="SerialTestMFCDialogDlg.h" />
@@ -111,6 +113,8 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\StringParser.cpp" />
+    <ClCompile Include="..\common\vgkStringUtility.cpp" />
     <ClCompile Include="SerialTestMFCDialog.cpp" />
     <ClCompile Include="SerialTestMFCDialogDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
