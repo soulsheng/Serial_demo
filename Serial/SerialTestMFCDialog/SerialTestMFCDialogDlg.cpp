@@ -167,9 +167,10 @@ HCURSOR CSerialTestMFCDialogDlg::OnQueryDragIcon()
 
 void CSerialTestMFCDialogDlg::setDefault()
 {
-	m_nIndexBaudRate = CSerial::EBaud115200;
-	m_nIndexByteType = CSerial::EData8;
-	m_nIndexParityType = CSerial::EParNone;
-	m_nIndexStopBits = CSerial::EStop1;
+	m_nIndexBaudRate = 12;					// CSerial::EBaud115200;
+	m_nIndexByteType = 3;					// CSerial::EData8;
+	m_nIndexParityType = 0;					// CSerial::EParNone;
+	m_nIndexStopBits = 0;					// CSerial::EStop1;
+	m_nIndexPort = 2;						// COM3
 }
 
