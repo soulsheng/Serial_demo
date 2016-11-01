@@ -7,6 +7,7 @@
 
 #include "SerialMFC.h"
 #include "StringParser.h"
+#include "helper_timer.h"
 
 #include <deque>
 #include <string>
@@ -72,4 +73,7 @@ public:
 
 	CString m_strGPSAngle;
 	CString m_strGroupBoxCom1ST;
+
+	StopWatchInterface* timer;		// test time interval
+
 };

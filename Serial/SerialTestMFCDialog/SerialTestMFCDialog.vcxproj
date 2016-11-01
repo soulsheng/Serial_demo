@@ -107,6 +107,7 @@
     <None Include="res\SerialTestMFCDialog.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\helper_timer.h" />
     <ClInclude Include="..\common\StringParser.h" />
     <ClInclude Include="..\common\vgkStringUtility.h" />
     <ClInclude Include="Resource.h" />

@@ -194,6 +194,14 @@ void CSerialTestMFCDialogDlg::setDefault()
 
 	SetTimer(0, 100, NULL);		// create a timer named '0'
 
+	sdkCreateTimer( &timer );
+	sdkStartTimer( &timer );
+
+	// open console window to printf variable
+	AllocConsole();
+	freopen("CONOUT$", "w+t", stdout);
+	freopen("CONIN$", "r+t", stdin);
+
 }
 
 
@@ -352,7 +360,7 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 	{
 		// Create a clean buffer
 		DWORD dwRead;
-		char szData[101];
+		char szData[101]={'\0'};
 		const int nBuflen = sizeof(szData)-1;
 
 		// Obtain the data from the serial port
@@ -363,6 +371,10 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 			m_lineBuffer.push_back( std::string(szData) );
 
 		} while (dwRead == nBuflen);
+
+		static int nID = 0;
+		printf("\n\nproduce string %d: %s \n", ++nID, szData);
+		TIME_TEST_CPU( "OnSerialMsg" )
 	}
 
 	return 0;
@@ -378,6 +390,8 @@ void CSerialTestMFCDialogDlg::OnTimer(UINT_PTR nIDEvent)
 		m_lineBuffer.pop_front();
 
 		m_parser.parseValueFromString( strShow );
+		static int nID = 0;
+		printf("\n\nconsume string %d: %s \n", ++nID, strShow.c_str());
 
 		DisplayData( (LPCTSTR)strShow.c_str() );
 	}
