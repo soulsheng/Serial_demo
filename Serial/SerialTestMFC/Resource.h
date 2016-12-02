@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by SerialTestMFC.rc
 //
 #define IDCANCEL2                       3
@@ -80,6 +80,10 @@
 #define IDI_ABOUT_ICON                  1309
 #define IDC_ABOUT_TITLE                 1310
 #define IDC_ABOUT_COPYRIGHT             1311
+#define IDC_COM5                        1312
+#define IDC_COM6                        1313
+#define IDC_COM7                        1314
+#define IDC_COM8                        1315
 #define ID_COM_OPEN                     32771
 #define ID_COM_CLOSE                    32772
 #define ID_COM_SETTINGS                 32773
@@ -94,7 +98,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1312
+#define _APS_NEXT_CONTROL_VALUE         1316
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
