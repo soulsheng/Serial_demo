@@ -173,7 +173,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 			DisplayData(lpszData);
 #else
 			// Display the fetched string
-			m_lineBuffer.push_back( std::string(szData) );
+			DisplayData(szData);//m_lineBuffer.push_back( std::string(szData) );
 #endif
 		} while (dwRead == nBuflen);
 	}
@@ -283,7 +283,7 @@ void CChildView::OnSetFocus(CWnd* pOldWnd)
 void CChildView::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	if ( !m_lineBuffer.empty() )
+	if ( 0 && !m_lineBuffer.empty() )
 	{
 		std::string strShow = m_lineBuffer.front();
 		m_lineBuffer.pop_front();
