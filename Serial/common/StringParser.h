@@ -26,6 +26,8 @@ protected:
 	StringVector	m_strVecPosition;		// position strings separated by ,
 	StringVector	m_strVecAngle;			// angle strings separated by ,
 
+	int		m_nFrameCount;
+
 	void parseAngleValueFromString( std::string str );
 	void parsePositionValueFromString( std::string& str );
 

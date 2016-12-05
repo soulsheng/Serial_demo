@@ -10,6 +10,8 @@ StringParser::StringParser()
 	m_bFrameValid[1] = false;
 
 	m_bFrameTypeCurrent = FRAME_NULL;
+
+	m_nFrameCount = 1;
 }
 
 
@@ -108,6 +110,10 @@ void StringParser::parseValueFromString( std::string& str )
 	else if ( FRAME_ANGLE == m_bFrameTypeCurrent )
 		std::sprintf(buf, "angle(%.4f,%.4f,%.3f) \n",
 		m_fAngle[0], m_fAngle[1], m_fAngle[2] );
+
+	if( m_nFrameCount % 20 == 0)
+		std::sprintf(buf, "%d frames:\n", m_nFrameCount );
+	m_nFrameCount ++;
 
 	if ( FRAME_NULL != m_bFrameTypeCurrent )
 		str = buf;
