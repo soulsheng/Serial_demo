@@ -173,7 +173,10 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 			DisplayData(lpszData);
 #else
 			// Display the fetched string
-			DisplayData(szData);//m_lineBuffer.push_back( std::string(szData) );
+			//DisplayData(szData);//m_lineBuffer.push_back( std::string(szData) );
+			std::string strShow(szData);
+			m_parser.parseValueFromString( strShow );
+			DisplayData( (LPCTSTR)strShow.c_str() );
 #endif
 		} while (dwRead == nBuflen);
 	}

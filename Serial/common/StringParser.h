@@ -17,7 +17,7 @@ class	StringParser
 {
 protected:
 	float	m_fAngle[3];
-	float	m_fPosition[3];
+	double	m_fPosition[3];
 	char	m_cDirection[2];
 
 	std::string		m_strLeft;	// string left from last frame
@@ -32,7 +32,7 @@ protected:
 public:
 	StringParser();
 	void parseValueFromString( std::string& str );
-	float*	getPosition(char *pDir);
+	double*	getPosition(char *pDir);
 	float*	getAngle();
 	StringVector*	getStringVectorPosition();
 	StringVector*	getStringVectorAngle();

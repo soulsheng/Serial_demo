@@ -103,17 +103,17 @@ void StringParser::parseValueFromString( std::string& str )
 	char buf[256];
 
 	if ( FRAME_POSITION == m_bFrameTypeCurrent )
-		std::sprintf(buf, "position(%f %c,%f %c,%f) \n", 
+		std::sprintf(buf, "position(%.8lf %c,%.8lf %c,%.3f) \n", 
 		m_fPosition[0], m_cDirection[0], m_fPosition[1], m_cDirection[1], m_fPosition[2] );
 	else if ( FRAME_ANGLE == m_bFrameTypeCurrent )
-		std::sprintf(buf, "angle(%f,%f,%f) \n",
+		std::sprintf(buf, "angle(%.4f,%.4f,%.3f) \n",
 		m_fAngle[0], m_fAngle[1], m_fAngle[2] );
 
 	if ( FRAME_NULL != m_bFrameTypeCurrent )
 		str = buf;
 }
 
-float* StringParser::getPosition( char *pDir )
+double* StringParser::getPosition( char *pDir )
 {
 	strcpy_s( pDir, 2, m_cDirection );
 	return m_fPosition;
