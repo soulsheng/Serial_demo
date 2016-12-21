@@ -129,34 +129,7 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 {
 	CSerial::EEvent eEvent = CSerial::EEvent(LOWORD(wParam));
 	CSerial::EError eError = CSerial::EError(HIWORD(wParam));
-#if 0
-	if (eError)
-		DisplayEvent(_T("An internal error occurred."));
 
-	if (eEvent & CSerial::EEventBreak)
-		DisplayEvent(_T("Break detected on input."));
-
-	if (eEvent & CSerial::EEventError)
-		DisplayEvent(_T("A line-status error occurred."));
-	
-	if (eEvent & CSerial::EEventRcvEv)
-		DisplayEvent(_T("Event character has been received."));
-
-	if (eEvent & CSerial::EEventRing)
-		DisplayEvent(_T("Ring detected"));
-	
-	if (eEvent & CSerial::EEventSend)
-		DisplayEvent(_T("All data is send"));
-	
-	if (eEvent & CSerial::EEventCTS)
-		DisplayEventSetting(_T("CTS signal change"), _T("CTS"), m_serial.GetCTS());
-	
-	if (eEvent & CSerial::EEventDSR)
-		DisplayEventSetting(_T("DSR signal change"), _T("DSR"), m_serial.GetDSR());
-	
-	if (eEvent & CSerial::EEventRLSD)
-		DisplayEventSetting(_T("RLSD signal change"), _T("RLSD"), m_serial.GetRLSD());
-#endif
 	if (eEvent & CSerial::EEventRcvEv)
 	{
 		// Create a clean buffer
@@ -169,31 +142,12 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 		{
 			m_serial.Read(szData,nBuflen,&dwRead);
 			szData[dwRead] = '\0';
-#if 0
-			// Scan the string for unwanted characters
-			for (DWORD dwChar=0; dwChar<dwRead; dwChar++)
-			{
-				if (!isprint(szData[dwChar]) && !isspace(szData[dwChar]))
-				{
-					szData[dwChar] = '.';
-				}
-			}
-#endif
-#ifdef _UNICODE
-			// Convert the ANSI data to Unicode
-			LPTSTR lpszData = LPTSTR(_alloca((dwRead+1)*sizeof(TCHAR)));
-			if (!::MultiByteToWideChar(CP_ACP, 0, szData, -1, lpszData, dwRead+1))
-				return 0;
 
-			// Display the fetched string
-			DisplayData(lpszData);
-#else
 			// Display the fetched string
 			//DisplayData(szData);//m_lineBuffer.push_back( std::string(szData) );
 			std::string strShow(szData);
 			m_parser.parseValueFromString( strShow );
 			DisplayData( (LPCTSTR)strShow.c_str() );
-#endif
 		} while (dwRead == nBuflen);
 	}
 
