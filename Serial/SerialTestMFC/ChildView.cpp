@@ -4,6 +4,8 @@
 #include "ComSelectDlg.h"
 #include "SheetSettings.h"
 
+#define ENABLE_CMD_WINDOW	1	// AllocConsole
+
 #ifdef _UNICODE
 #include <malloc.h>
 #endif
@@ -44,6 +46,12 @@ CChildView::~CChildView()
 {
 	// Close the serial port
 	m_serial.Close();
+
+#if ENABLE_CMD_WINDOW
+	// close console window
+	FreeConsole();
+#endif
+
 }
 
 BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
@@ -97,6 +105,14 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// Set the serial port in the RichCommEdit control
 	m_wndEdit.m_pSerial = &m_serial;
+
+#if ENABLE_CMD_WINDOW
+	// open console window to printf variable
+	AllocConsole();
+	freopen("CONOUT$", "w+t", stdout);
+	freopen("CONIN$", "r+t", stdin);
+#endif
+
 	return 0;
 }
 
