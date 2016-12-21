@@ -31,6 +31,8 @@ public:
 	std::deque<std::string>		m_lineBuffer;
 	
 	StringParser	m_parser;
+	std::string		m_strFrame;
+	int				m_nCountEvent;
 
 public:
 	// Overrides

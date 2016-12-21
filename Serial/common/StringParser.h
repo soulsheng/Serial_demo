@@ -20,7 +20,7 @@ protected:
 	double	m_fPosition[3];
 	char	m_cDirection[2];
 
-	std::string		m_strLeft;	// string left from last frame
+	std::string		strCurrentFrame;	// string current frame
 	bool	m_bFrameValid[2];	// position or angle frame is valid or not
 	FRAME_TYPE	m_bFrameTypeCurrent;
 	StringVector	m_strVecPosition;		// position strings separated by ,
@@ -30,14 +30,18 @@ protected:
 
 	void parseAngleValueFromString( std::string str );
 	void parsePositionValueFromString( std::string& str );
+	void parseValueFromString( );
+	void setDefault();
 
 public:
 	StringParser();
-	void parseValueFromString( std::string& str );
+	int		parseValueFromString( std::string& str );
 	double*	getPosition(char *pDir);
 	float*	getAngle();
 	StringVector*	getStringVectorPosition();
 	StringVector*	getStringVectorAngle();
 	FRAME_TYPE		getFrameType();
 	bool			isFrameValid();
+	std::string		formatCurrentFrameToString();
+	bool			isFrameComplete( std::string& str );
 };

@@ -40,6 +40,7 @@ END_MESSAGE_MAP()
 
 CChildView::CChildView()
 {
+	m_nCountEvent = 0;
 }
 
 CChildView::~CChildView()
@@ -143,12 +144,33 @@ LRESULT CChildView::OnSerialMsg (WPARAM wParam, LPARAM /*lParam*/)
 			m_serial.Read(szData,nBuflen,&dwRead);
 			szData[dwRead] = '\0';
 
-			// Display the fetched string
-			//DisplayData(szData);//m_lineBuffer.push_back( std::string(szData) );
-			std::string strShow(szData);
-			m_parser.parseValueFromString( strShow );
-			DisplayData( (LPCTSTR)strShow.c_str() );
+			m_strFrame += std::string(szData);
+
 		} while (dwRead == nBuflen);
+
+		printf( "m_strFrameALL(%d) = %s \n ", m_strFrame.length(), m_strFrame.c_str() );
+		//DisplayData( (LPCTSTR)m_strFrame.c_str() );
+
+		if( m_nCountEvent % 10 == 0 )
+			DisplayData("\n\n\n");
+
+		std::string strFrameCurrent;
+
+		if ( m_parser.isFrameComplete(m_strFrame) )
+		{
+			int nRet = m_parser.parseValueFromString( m_strFrame );
+
+			if( nRet != -1 )
+			{
+				strFrameCurrent = m_parser.formatCurrentFrameToString();
+
+				printf( "frame %d: m_strFrameCurrent(%d) = %s \n ", m_nCountEvent, strFrameCurrent.length(), strFrameCurrent.c_str() );
+				DisplayData( (LPCTSTR)strFrameCurrent.c_str() );
+
+				m_nCountEvent ++ ;
+			}
+
+		}
 	}
 
 	return 0;

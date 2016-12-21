@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "StringParser.h"
 
-
+#define		FRAME_SIZE		151
 
 StringParser::StringParser()
 {
@@ -11,7 +11,9 @@ StringParser::StringParser()
 
 	m_bFrameTypeCurrent = FRAME_NULL;
 
-	m_nFrameCount = 1;
+	m_nFrameCount = 0;
+
+	setDefault();
 }
 
 
@@ -26,7 +28,7 @@ void StringParser::parseAngleValueFromString( std::string str )
 
 	str = str.substr( nIndexFindBegin+4 );	// remove substring "...AVR,"
 
-	int nIndexFindEnd = str.find_last_of("\r\n");
+	int nIndexFindEnd = str.find("\r\n");
 
 	std::string strSub = str.substr( 0, nIndexFindEnd );
 	
@@ -40,11 +42,6 @@ void StringParser::parseAngleValueFromString( std::string str )
 		m_fAngle[2] = atof( m_strVecAngle[7].c_str() );
 	}
 
-
-	if ( str.size() > strSub.size()+2 )	// strSub have no "\r\n"
-		m_strLeft = str.substr( nIndexFindEnd + 2 );
-	else
-		m_strLeft.clear();
 }
 
 void StringParser::parsePositionValueFromString( std::string& str )
@@ -53,7 +50,6 @@ void StringParser::parsePositionValueFromString( std::string& str )
 
 	if( nIndexFindBegin == -1 )
 	{
-		m_strLeft = str;
 		return;
 	}
 
@@ -61,9 +57,12 @@ void StringParser::parsePositionValueFromString( std::string& str )
 
 	str = str.substr( nIndexFindBegin+6 );	// remove substring "...GPGGA,"
 
-	int nIndexFindEnd = str.find_last_of("\r\n");
+	int nIndexFindEnd = str.find("\r\n", nIndexFindBegin);
 
 	std::string strSub = str.substr( 0, nIndexFindEnd );
+
+	// remove GPGGA sub-frame 
+	str = str.substr( nIndexFindEnd+2 );
 
 	m_strVecPosition.clear();
 
@@ -78,46 +77,9 @@ void StringParser::parsePositionValueFromString( std::string& str )
 		m_cDirection[1] = m_strVecPosition[4].at(0);
 	}
 
-	if ( str.size() > strSub.size()+2 )	// strSub have no "\r\n"
-		m_strLeft = str.substr( nIndexFindEnd + 2 );
-	else
-		m_strLeft.clear();
+
 }
 
-void StringParser::parseValueFromString( std::string& str )
-{
-	m_bFrameTypeCurrent = FRAME_NULL;
-
-	int nIndexFind = str.find_last_of("\r\n");
-
-	if( nIndexFind == -1)
-		return;
-
-	str = m_strLeft + str;
-
-	parsePositionValueFromString( str );
-
-	nIndexFind = m_strLeft.find_last_of("\r\n");
-
-	if( nIndexFind != -1)
-		parseAngleValueFromString( m_strLeft );
-
-	char buf[256];
-
-	if ( FRAME_POSITION == m_bFrameTypeCurrent )
-		std::sprintf(buf, "position(%.8lf %c,%.8lf %c,%.3f) \n", 
-		m_fPosition[0], m_cDirection[0], m_fPosition[1], m_cDirection[1], m_fPosition[2] );
-	else if ( FRAME_ANGLE == m_bFrameTypeCurrent )
-		std::sprintf(buf, "angle(%.4f,%.4f,%.3f) \n",
-		m_fAngle[0], m_fAngle[1], m_fAngle[2] );
-
-	if( m_nFrameCount % 20 == 0)
-		std::sprintf(buf, "%d frames:\n", m_nFrameCount );
-	m_nFrameCount ++;
-
-	if ( FRAME_NULL != m_bFrameTypeCurrent )
-		str = buf;
-}
 
 double* StringParser::getPosition( char *pDir )
 {
@@ -148,4 +110,72 @@ FRAME_TYPE StringParser::getFrameType()
 bool StringParser::isFrameValid()
 {
 	return m_bFrameTypeCurrent != FRAME_NULL;
+}
+
+std::string StringParser::formatCurrentFrameToString()
+{
+	// format frame value back to string
+	std::string str;
+
+	char buf[256];
+
+	std::sprintf(buf, "position(%.8lf %c,%.8lf %c,%.3f) \n", 
+		m_fPosition[0], m_cDirection[0], m_fPosition[1], m_cDirection[1], m_fPosition[2] );
+
+	str = buf;
+
+	std::sprintf(buf, "angle(%.4f,%.4f,%.3f) \n",
+		m_fAngle[0], m_fAngle[1], m_fAngle[2] );
+
+	str += buf;
+
+	return str;
+}
+
+void StringParser::setDefault()
+{
+	m_fAngle[0] = m_fAngle[1] = m_fAngle[2] = 0.0f;
+	m_fPosition[0] = m_fPosition[1] = m_fPosition[2] = 0.0f;
+	m_cDirection[0] = m_cDirection[1] = 0;
+}
+
+void StringParser::parseValueFromString( )
+{
+
+	parsePositionValueFromString( strCurrentFrame );
+
+	parseAngleValueFromString( strCurrentFrame );
+
+}
+
+int StringParser::parseValueFromString( std::string& str )
+{
+	int nBegin = str.find("GPGGA");
+
+	if ( nBegin != -1 )
+		printf("GPS frame begin at = %d \n", nBegin );
+
+
+	parseValueFromString(  );
+
+	str = str.substr( nBegin+151, std::string::npos );
+
+	m_nFrameCount ++;
+
+	return nBegin;
+}
+
+bool StringParser::isFrameComplete( std::string& str )
+{
+	int nBegin = str.find("GPGGA");
+
+	if ( nBegin == -1 )
+		return false;
+
+	strCurrentFrame = str.substr( nBegin, FRAME_SIZE );
+
+	if( strCurrentFrame.length() < FRAME_SIZE )
+		return false;
+	
+	return true;
 }
