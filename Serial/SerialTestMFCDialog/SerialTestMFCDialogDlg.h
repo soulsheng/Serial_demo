@@ -76,4 +76,6 @@ public:
 
 	StopWatchInterface* timer;		// test time interval
 
+	std::string		m_strFrame;
+	int				m_nCountEvent;
 };

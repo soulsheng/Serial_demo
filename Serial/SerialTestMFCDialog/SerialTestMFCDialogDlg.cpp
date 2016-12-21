@@ -192,6 +192,8 @@ void CSerialTestMFCDialogDlg::setDefault()
 
 	m_bStartRead = false;
 
+	m_nCountEvent = 0;
+
 	SetTimer(0, 100, NULL);		// create a timer named '0'
 
 	sdkCreateTimer( &timer );
@@ -213,7 +215,7 @@ void CSerialTestMFCDialogDlg::DisplayData( LPCTSTR pszData )
 
 	vgKernel::StringVector* pStrVec;
 	
-	if( FRAME_POSITION == m_parser.getFrameType() )
+
 	{
 		pStrVec = m_parser.getStringVectorPosition( );
 		if( pStrVec->size() >= 9 )
@@ -226,7 +228,7 @@ void CSerialTestMFCDialogDlg::DisplayData( LPCTSTR pszData )
 		}
 	}
 
-	if( FRAME_ANGLE == m_parser.getFrameType() )
+
 	{
 		pStrVec = m_parser.getStringVectorAngle( );
 		if( pStrVec->size() >= 8 )
@@ -368,13 +370,33 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 		{
 			m_serial.Read(szData,nBuflen,&dwRead);
 			szData[dwRead] = '\0';
-			m_lineBuffer.push_back( std::string(szData) );
+			m_strFrame += std::string(szData);
 
 		} while (dwRead == nBuflen);
 
-		static int nID = 0;
-		printf("\n\nproduce string %d: %s \n", ++nID, szData);
-		TIME_TEST_CPU( "OnSerialMsg" )
+		printf( "m_strFrameALL(%d) = %s \n ", m_strFrame.length(), m_strFrame.c_str() );
+		//DisplayData( (LPCTSTR)m_strFrame.c_str() );
+
+		if( m_nCountEvent % 10 == 0 )
+			DisplayData("\n\n\n");
+
+		std::string strFrameCurrent;
+
+		if ( m_parser.isFrameComplete(m_strFrame) )
+		{
+			int nRet = m_parser.parseValueFromString( m_strFrame );
+
+			if( nRet != -1 )
+			{
+				strFrameCurrent = m_parser.formatCurrentFrameToString();
+
+				printf( "frame %d: m_strFrameCurrent(%d) = %s \n ", m_nCountEvent, strFrameCurrent.length(), strFrameCurrent.c_str() );
+				DisplayData( (LPCTSTR)strFrameCurrent.c_str() );
+
+				m_nCountEvent ++ ;
+			}
+
+		}
 	}
 
 	return 0;
@@ -384,7 +406,7 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 void CSerialTestMFCDialogDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	if ( !m_lineBuffer.empty() )
+	if ( 0 && !m_lineBuffer.empty() )
 	{
 		std::string strShow = m_lineBuffer.front();
 		m_lineBuffer.pop_front();
