@@ -82,6 +82,6 @@ public:
 
 	CImage			image;
 	CDC *pDC;
-	RECT rect;
+	CRect rect;
 
 };

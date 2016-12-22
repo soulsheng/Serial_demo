@@ -182,7 +182,7 @@ void CSerialTestMFCDialogDlg::OnPaint()
 		CDialogEx::OnPaint();
 	}
 
-	image.AlphaBlend( pDC->m_hDC, rect.left, rect.top );	//已控件尺寸大小来绘图
+	image.Draw( pDC->m_hDC, rect );	//已控件尺寸大小来绘图
 	ReleaseDC( pDC );
 
 }
