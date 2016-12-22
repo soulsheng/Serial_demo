@@ -39,6 +39,7 @@ protected:
 
 	void	setDefault();
 	void	DisplayData (LPCTSTR pszData);
+	void	LoadImg(CImage &image, CString &strPath);
 
 public:
 	CComboBox m_comboPort;
@@ -78,4 +79,9 @@ public:
 
 	std::string		m_strFrame;
 	int				m_nCountEvent;
+
+	CImage			image;
+	CDC *pDC;
+	RECT rect;
+
 };

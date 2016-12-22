@@ -80,6 +80,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SerialD.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\..\_Output\$(Configuration)\</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBCMTD.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -148,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
+    <None Include="res\compass-256up.png" />
     <None Include="res\SerialTestMFCDialog.ico" />
     <None Include="res\SerialTestMFCDialog.rc2" />
   </ItemGroup>

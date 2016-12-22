@@ -130,6 +130,14 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	setDefault();
 	UpdateData( FALSE );
 
+	// 图片控件 透明 
+	LoadImg( image, CString("./res/compass-256up.png") );
+
+	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
+	pDC = pWnd->GetDC();
+	pWnd->GetClientRect(&rect);	//取得客户区尺寸
+	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -173,6 +181,10 @@ void CSerialTestMFCDialogDlg::OnPaint()
 	{
 		CDialogEx::OnPaint();
 	}
+
+	image.AlphaBlend( pDC->m_hDC, rect.left, rect.top );	//已控件尺寸大小来绘图
+	ReleaseDC( pDC );
+
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
@@ -429,4 +441,27 @@ void CSerialTestMFCDialogDlg::OnBnClickedButtonComRead()
 	m_bStartRead = true;
 
 	m_serial.Purge();	// 清空端口缓存中已经累积的数据
+}
+
+void CSerialTestMFCDialogDlg::LoadImg(CImage &image, CString &strPath)
+{
+	image.Load(strPath);
+
+	if (image.IsNull()) {
+		MessageBox(_T("图片未加载成功!"));
+		return;
+	}
+
+	// 判断是否需要透明显示，并做相应处理
+	if (image.GetBPP() == 32) {
+		for (int i = 0; i < image.GetWidth(); ++i) {
+			for (int j = 0; j < image.GetHeight(); ++j) {
+				byte *pByte = (byte *)image.GetPixelAddress(i, j);
+				pByte[0] = pByte[0] * pByte[3] / 255;
+				pByte[1] = pByte[1] * pByte[3] / 255;
+				pByte[2] = pByte[2] * pByte[3] / 255;
+			}
+		}
+	}
+
 }

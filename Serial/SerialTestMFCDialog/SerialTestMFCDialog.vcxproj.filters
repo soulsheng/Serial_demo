@@ -22,6 +22,9 @@
     <None Include="res\SerialTestMFCDialog.ico">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\compass-256up.png">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SerialTestMFCDialog.h">
