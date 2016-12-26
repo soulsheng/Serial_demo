@@ -133,11 +133,6 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	// 图片控件 透明 
 	LoadImg( image, CString("./res/compass-256up.png") );
 
-	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
-	pDC = pWnd->GetDC();
-	hDc = pDC->m_hDC;	
-	pWnd->GetClientRect(&rect);	//取得客户区尺寸
-	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -405,6 +400,8 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 
 				printf( "frame %d: m_strFrameCurrent(%d) = %s \n ", m_nCountEvent, strFrameCurrent.length(), strFrameCurrent.c_str() );
 				DisplayData( (LPCTSTR)strFrameCurrent.c_str() );
+				
+				Invalidate( FALSE );
 
 				m_nCountEvent ++ ;
 			}
@@ -512,8 +509,15 @@ void CSerialTestMFCDialogDlg::restoreControlRotation( float m_iAngle )
 void CSerialTestMFCDialogDlg::drawImage()
 {
 	// draw image 
-	float m_iAngle = 45; //m_parser.getAngle()[0]
+	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
+	pDC = pWnd->GetDC();
+	hDc = pDC->m_hDC;	
+	pWnd->GetClientRect(&rect);	//取得客户区尺寸
+	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
+
+	float m_iAngle = m_parser.getAngle()[0];
 	rotateControl(m_iAngle);
+
 	image.Draw( hDc, rect );	//已控件尺寸大小来绘图
 	ReleaseDC( pDC );
 
