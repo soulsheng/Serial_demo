@@ -135,6 +135,7 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 
 	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
 	pDC = pWnd->GetDC();
+	hDc = pDC->m_hDC;	
 	pWnd->GetClientRect(&rect);	//取得客户区尺寸
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
@@ -179,51 +180,10 @@ void CSerialTestMFCDialogDlg::OnPaint()
 	}
 	else
 	{
-
-		float m_iAngle = 45; //m_parser.getAngle()[0]
-
-		POINT centerPt;
-		centerPt.x = (rect.right - rect.left)/2 ;
-		centerPt.y = (rect.bottom - rect.top)/2 ;
-
-		//
-		// rotate the DC
-		//
-		HDC hDc = pDC->m_hDC;
-		int nGraphicsMode = SetGraphicsMode(hDc, GM_ADVANCED);
-		XFORM xform;
-		if ( m_iAngle != 0 )
-		{
-			double fangle = (double)m_iAngle / 180. * 3.1415926;
-			xform.eM11 = (float)cos(fangle);
-			xform.eM12 = (float)sin(fangle);
-			xform.eM21 = (float)-sin(fangle);
-			xform.eM22 = (float)cos(fangle);
-			xform.eDx = (float)(centerPt.x - cos(fangle)*centerPt.x + sin(fangle)*centerPt.y);
-			xform.eDy = (float)(centerPt.y - cos(fangle)*centerPt.y - sin(fangle)*centerPt.x);
-
-			SetWorldTransform(hDc, &xform);
-		}
-
-
-		image.Draw( hDc, rect );	//已控件尺寸大小来绘图
-		ReleaseDC( pDC );
+		drawImage();
 
 		CDialogEx::OnPaint();
 
-		// restore the DC
-		if ( m_iAngle != 0 )
-		{
-			xform.eM11 = (float)1.0; 
-			xform.eM12 = (float)0;
-			xform.eM21 = (float)0;
-			xform.eM22 = (float)1.0;
-			xform.eDx = (float)0;
-			xform.eDy = (float)0;
-
-			SetWorldTransform(hDc, &xform);
-		}
-		SetGraphicsMode(hDc, nGraphicsMode);
 	}
 
 }
@@ -505,4 +465,57 @@ void CSerialTestMFCDialogDlg::LoadImg(CImage &image, CString &strPath)
 		}
 	}
 
+}
+
+void CSerialTestMFCDialogDlg::rotateControl( float m_iAngle )
+{
+
+	POINT centerPt;
+	centerPt.x = (rect.right - rect.left)/2 ;
+	centerPt.y = (rect.bottom - rect.top)/2 ;
+
+	//
+	// rotate the DC
+	//
+	nGraphicsMode = SetGraphicsMode(hDc, GM_ADVANCED);
+	if ( m_iAngle != 0 )
+	{
+		double fangle = (double)m_iAngle / 180. * 3.1415926;
+		xform.eM11 = (float)cos(fangle);
+		xform.eM12 = (float)sin(fangle);
+		xform.eM21 = (float)-sin(fangle);
+		xform.eM22 = (float)cos(fangle);
+		xform.eDx = (float)(centerPt.x - cos(fangle)*centerPt.x + sin(fangle)*centerPt.y);
+		xform.eDy = (float)(centerPt.y - cos(fangle)*centerPt.y - sin(fangle)*centerPt.x);
+
+		SetWorldTransform(hDc, &xform);
+	}
+}
+
+void CSerialTestMFCDialogDlg::restoreControlRotation( float m_iAngle )
+{
+	// restore the DC
+	if ( m_iAngle != 0 )
+	{
+		xform.eM11 = (float)1.0; 
+		xform.eM12 = (float)0;
+		xform.eM21 = (float)0;
+		xform.eM22 = (float)1.0;
+		xform.eDx = (float)0;
+		xform.eDy = (float)0;
+
+		SetWorldTransform(hDc, &xform);
+	}
+	SetGraphicsMode(hDc, nGraphicsMode);
+}
+
+void CSerialTestMFCDialogDlg::drawImage()
+{
+	// draw image 
+	float m_iAngle = 45; //m_parser.getAngle()[0]
+	rotateControl(m_iAngle);
+	image.Draw( hDc, rect );	//已控件尺寸大小来绘图
+	ReleaseDC( pDC );
+
+	restoreControlRotation(m_iAngle);
 }

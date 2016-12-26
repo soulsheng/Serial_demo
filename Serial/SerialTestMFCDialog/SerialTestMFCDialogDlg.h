@@ -41,6 +41,10 @@ protected:
 	void	DisplayData (LPCTSTR pszData);
 	void	LoadImg(CImage &image, CString &strPath);
 
+	void	rotateControl( float m_iAngle );
+	void	restoreControlRotation( float m_iAngle );
+	void	drawImage();
+
 public:
 	CComboBox m_comboPort;
 	// 端口索引，0对应COM1
@@ -83,5 +87,8 @@ public:
 	CImage			image;
 	CDC *pDC;
 	CRect rect;
+	HDC hDc;
+	int nGraphicsMode ;
+	XFORM xform;
 
 };
