@@ -569,7 +569,7 @@ void CSerialTestMFCDialogDlg::DrawAngleYaw( CPaintDC &dc, CRect rt )
 {
 
 	//画圆
-	dc.Ellipse(x5,y5,x6,y6);//(x1,y1),(x2,y2)为包围原型的矩形的左上角和右下角的坐标
+	//dc.Ellipse(x5,y5,x6,y6);//(x1,y1),(x2,y2)为包围原型的矩形的左上角和右下角的坐标
 
 	//圆方向标识
 	dc.TextOut(x5 + (x6-x5) / 2 - 5, y5 + 5, _T("N"));
