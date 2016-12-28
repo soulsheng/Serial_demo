@@ -222,9 +222,9 @@ void CSerialTestMFCDialogDlg::setDefault()
 	freopen("CONIN$", "r+t", stdin);
 
 	// compass graph
-	rect[0] = CRect( CPoint(360,  36), CSize(260, 260) ); // (630, 100, 930, 400);  
-	rect[1] = CRect( CPoint(355, 340), CSize(270,  10) ); // (590, 470, 950, 500)
-	rect[2] = CRect( CPoint(300,  30), CSize( 10, 270) ); // (520,  90, 550, 450)
+	rect[0] = CRect( CPoint(350,  45), CSize(260, 260) ); // (630, 100, 930, 400);  
+	rect[1] = CRect( CPoint(350, 340), CSize(270,  10) ); // (590, 470, 950, 500)
+	rect[2] = CRect( CPoint(300,  80), CSize( 10, 270) ); // (520,  90, 550, 450)
 
 	x5 = rect[0].left;
 	y5 = rect[0].top;
