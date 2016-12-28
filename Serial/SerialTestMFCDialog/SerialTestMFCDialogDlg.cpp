@@ -700,13 +700,13 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 
 	//横框指示箭头，pitch 
 	CPoint pts[3];
-	pts[0].x = x1 + space * (lineCount / 2) - 10 + tilt * (space / 10);//10度一分隔
+	pts[0].x = x1 + space * (lineCount / 2) - 10 + tilt * (space / 10.0f);//10度一分隔
 	pts[0].y = y1 - 15;
 
-	pts[1].x = x1 + space * (lineCount / 2) + 10 + tilt * (space / 10);
+	pts[1].x = x1 + space * (lineCount / 2) + 10 + tilt * (space / 10.0f);
 	pts[1].y = y1 - 15;
 
-	pts[2].x = x1 + space * (lineCount / 2) + tilt * (space / 10);
+	pts[2].x = x1 + space * (lineCount / 2) + tilt * (space / 10.0f);
 	pts[2].y = y1;
 
 	dc.Polygon(pts, 3);
@@ -715,13 +715,13 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	CPoint pts2[3];
 
 	pts2[0].x = x4;//10度一分隔
-	pts2[0].y = y3 + space * (lineCount / 2) - tiltSrc1 * (space / 10);
+	pts2[0].y = y3 + space * (lineCount / 2) - tiltSrc1 * (space / 10.0f);
 
 	pts2[1].x = x4 + 15;
-	pts2[1].y = y3 + space * (lineCount / 2) - 10 - tiltSrc1 * (space / 10);
+	pts2[1].y = y3 + space * (lineCount / 2) - 10 - tiltSrc1 * (space / 10.0f);
 
 	pts2[2].x = x4 + 15;
-	pts2[2].y = y3 + space * (lineCount / 2) + 10 - tiltSrc1 * (space / 10);
+	pts2[2].y = y3 + space * (lineCount / 2) + 10 - tiltSrc1 * (space / 10.0f);
 
 	dc.Polygon(pts2, 3);
 
