@@ -134,7 +134,7 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	UpdateData( FALSE );
 
 	// 图片控件 透明 
-	LoadImg( image, CString("./res/compass-256up.png") );
+	LoadImg( image, CString("./res/compass-ruler.png") );
 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -559,7 +559,7 @@ void CSerialTestMFCDialogDlg::drawImage( float m_iAngle )
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
 
-	rotateControl(m_iAngle);
+	rotateControl(-m_iAngle);
 
 	image.Draw( hDc, rectCompass );	//已控件尺寸大小来绘图
 	ReleaseDC( pDC );
@@ -727,7 +727,24 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 
 	dc.Polygon(pts2, 3);
 
+#if 1
+	//圆指示箭头，yaw 保持不动，中间图片反方向旋转 
+	xYawSrc = x5+(x6-x5)/2;
+	yYawSrc = y5;
 
+	CPoint pts3[3];
+
+	pts3[0].x = xYawSrc - 10;
+	pts3[0].y = yYawSrc -15;
+
+	pts3[1].x = xYawSrc + 10;
+	pts3[1].y = yYawSrc -15;
+
+	pts3[2].x = xYawSrc;
+	pts3[2].y = yYawSrc;
+
+	dc.Polygon(pts3, 3);
+#else
 	//圆指示箭头，yaw 
 	CPoint pts3[3];
 
@@ -796,7 +813,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	dc.MoveTo(x0, y0);
 	dc.LineTo(xYawSrc, yYawSrc);
 	dc.SelectObject(pOldPen);
-
+#endif
 }
 
 void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
@@ -813,13 +830,15 @@ void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
 	CFont font;
 	font.CreatePointFont(80, _T("宋体"), NULL);
 	CFont *pOldFont=dc.SelectObject(&font);
-
+#if 0
 	// 设置面/区域颜色，透明无色
 	CBrush* pOldBrush = (CBrush*)dc.SelectStockObject(NULL_BRUSH);  
 
 	DrawAngleYaw( dc, rect[0] );
 
 	dc.SelectObject(pOldBrush);
+#endif
+	CBrush* pOldBrush;
 
 	pOldBrush = (CBrush*)dc.SelectStockObject(NULL_BRUSH); 
 
