@@ -178,11 +178,13 @@ void CSerialTestMFCDialogDlg::OnPaint()
 	}
 	else
 	{
-		drawImage();
+		float* m_fAngle = m_parser.getAngle();
+
+		drawImage( m_fAngle[0] );
 
 		CPaintDC dc(this); // 用于绘制的设备上下文
 		DrawCompassBackground( dc );
-		DrawAngleUpdate( dc, 30, 60, 90 );
+		DrawAngleUpdate( dc, m_fAngle[0], m_fAngle[1], m_fAngle[2] );
 
 		CDialogEx::OnPaint();
 
@@ -547,7 +549,7 @@ void CSerialTestMFCDialogDlg::restoreControlRotation( float m_iAngle )
 	SetGraphicsMode(hDc, nGraphicsMode);
 }
 
-void CSerialTestMFCDialogDlg::drawImage()
+void CSerialTestMFCDialogDlg::drawImage( float m_iAngle )
 {
 	// draw image 
 	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
@@ -556,7 +558,7 @@ void CSerialTestMFCDialogDlg::drawImage()
 	pWnd->GetClientRect(&rectCompass);	//取得客户区尺寸
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
-	float m_iAngle = m_parser.getAngle()[0];
+
 	rotateControl(m_iAngle);
 
 	image.Draw( hDc, rectCompass );	//已控件尺寸大小来绘图

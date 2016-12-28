@@ -43,7 +43,7 @@ protected:
 
 	void	rotateControl( float m_iAngle );
 	void	restoreControlRotation( float m_iAngle );
-	void	drawImage();
+	void	drawImage( float m_iAngle );
 
 	void DrawCompassBackground( CPaintDC &dc );
 
