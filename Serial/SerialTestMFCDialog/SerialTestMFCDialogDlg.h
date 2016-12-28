@@ -45,6 +45,13 @@ protected:
 	void	restoreControlRotation( float m_iAngle );
 	void	drawImage();
 
+	void DrawCompassBackground( CPaintDC &dc );
+
+	void DrawAngleYaw( CPaintDC &dc, CRect rt );
+	void DrawAnglePitch( CPaintDC &dc, CRect rt );
+	void DrawAngleRoll( CPaintDC &dc, CRect rt );
+	void DrawAngleUpdate( CPaintDC &dc, float yaw, float pitch, float roll );
+
 public:
 	CComboBox m_comboPort;
 	// 端口索引，0对应COM1
@@ -86,9 +93,16 @@ public:
 
 	CImage			image;
 	CDC *pDC;
-	CRect rect;
+	CRect rectCompass;
 	HDC hDc;
 	int nGraphicsMode ;
 	XFORM xform;
+
+	// compass background graph
+	CRect		rect[3]; // yaw, pitch, roll 
+	int			x1,y1,x2,y2,x3,y3,x4,y4,x5,y5,x6,y6;
+	int			space, lineCount;
+	float		x0, y0, radius;	// center(x0, y0) radius of circle for yaw 
+	int			xYawSrc, yYawSrc;
 
 };

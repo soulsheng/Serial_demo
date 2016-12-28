@@ -13,6 +13,9 @@
 
 #include "Serial.h"
 
+#define PI 3.1415926
+
+
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
 class CAboutDlg : public CDialogEx
@@ -177,6 +180,10 @@ void CSerialTestMFCDialogDlg::OnPaint()
 	{
 		drawImage();
 
+		CPaintDC dc(this); // 用于绘制的设备上下文
+		DrawCompassBackground( dc );
+		DrawAngleUpdate( dc, 30, 60, 90 );
+
 		CDialogEx::OnPaint();
 
 	}
@@ -211,6 +218,40 @@ void CSerialTestMFCDialogDlg::setDefault()
 	AllocConsole();
 	freopen("CONOUT$", "w+t", stdout);
 	freopen("CONIN$", "r+t", stdin);
+
+	// compass graph
+	rect[0] = CRect( CPoint(360,  36), CSize(260, 260) ); // (630, 100, 930, 400);  
+	rect[1] = CRect( CPoint(355, 340), CSize(270,  10) ); // (590, 470, 950, 500)
+	rect[2] = CRect( CPoint(300,  30), CSize( 10, 270) ); // (520,  90, 550, 450)
+
+	x5 = rect[0].left;
+	y5 = rect[0].top;
+	x6 = rect[0].right;
+	y6 = rect[0].bottom;
+
+	x1 = rect[1].left;
+	y1 = rect[1].top;
+	x2 = rect[1].right;
+	y2 = rect[1].bottom;
+
+	x3 = rect[2].left;
+	y3 = rect[2].top;
+	x4 = rect[2].right;
+	y4 = rect[2].bottom;
+
+	//圆的半径
+	radius = (x6-x5)/2;
+
+	//大圆心坐标
+	x0 = x5 + (x6-x5)/2;
+	y0 = y5 + (y6-y5)/2;
+
+	//10度为一格；若5度为1格，修改此值为10    -90到90,18格 
+	lineCount = 18;
+	space = (y4 - y3) / lineCount;
+
+	xYawSrc = 0;
+	yYawSrc = 0;
 
 }
 
@@ -468,8 +509,8 @@ void CSerialTestMFCDialogDlg::rotateControl( float m_iAngle )
 {
 
 	POINT centerPt;
-	centerPt.x = (rect.right - rect.left)/2 ;
-	centerPt.y = (rect.bottom - rect.top)/2 ;
+	centerPt.x = (rectCompass.right - rectCompass.left)/2 ;
+	centerPt.y = (rectCompass.bottom - rectCompass.top)/2 ;
 
 	//
 	// rotate the DC
@@ -512,14 +553,279 @@ void CSerialTestMFCDialogDlg::drawImage()
 	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
 	pDC = pWnd->GetDC();
 	hDc = pDC->m_hDC;	
-	pWnd->GetClientRect(&rect);	//取得客户区尺寸
+	pWnd->GetClientRect(&rectCompass);	//取得客户区尺寸
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
 	float m_iAngle = m_parser.getAngle()[0];
 	rotateControl(m_iAngle);
 
-	image.Draw( hDc, rect );	//已控件尺寸大小来绘图
+	image.Draw( hDc, rectCompass );	//已控件尺寸大小来绘图
 	ReleaseDC( pDC );
 
 	restoreControlRotation(m_iAngle);
+}
+
+void CSerialTestMFCDialogDlg::DrawAngleYaw( CPaintDC &dc, CRect rt )
+{
+
+	//画圆
+	dc.Ellipse(x5,y5,x6,y6);//(x1,y1),(x2,y2)为包围原型的矩形的左上角和右下角的坐标
+
+	//圆方向标识
+	dc.TextOut(x5 + (x6-x5) / 2 - 5, y5 + 5, _T("N"));
+	dc.TextOut(x6 - 20, y5 + (y6-y5) / 2 - 10, _T("E"));
+	dc.TextOut(x5 + 10, y5 + (y6-y5) / 2 - 10, _T("W"));
+	dc.TextOut(x5 + (x6-x5) / 2 - 5, y6 - 20, _T("S"));
+
+	//圆角度文本标识， 45°的倍数，共8个
+	dc.TextOut(x5 + (x6-x5) / 2 - 5, y5 - 20, _T("0"));
+	dc.TextOut(x6 + 5, y5 + (y6-y5) / 2 - 10, _T("90"));
+	dc.TextOut(x5 - 20, y5 + (y6-y5) / 2 -10, _T("270"));
+	dc.TextOut(x5 + (x6-x5) / 2 - 10, y6 + 5, _T("180"));
+
+
+	dc.TextOut(x0 + radius * cos(45*PI/180.0)+5, y0 - radius * sin(45*PI/180.0)-15, _T("45"));
+	dc.TextOut(x0 + radius * cos(45*PI/180.0), y0 + radius * sin(45*PI/180.0), _T("135"));
+	dc.TextOut(x0 - radius * cos(45*PI/180.0)-20, y0 + radius * sin(45*PI/180.0), _T("225"));
+	dc.TextOut(x0 - radius * cos(45*PI/180.0)-20, y0 - radius * sin(45*PI/180.0)-15, _T("315"));
+
+
+	//定义画刷颜色，绿色小圆，共8个 
+	CBrush brushGreen(RGB(0, 255, 0));
+	CBrush* pOldBrush = dc.SelectObject(&brushGreen);
+
+	dc.Ellipse(x5 + (x6-x5) / 2 - 3, y5 - 3, x5 + (x6-x5) / 2 + 3, y5 + 3);
+	dc.Ellipse(x6 - 3, y5 + (y6-y5) / 2 - 3, x6 + 3, y5 + (y6-y5) / 2 + 3);
+	dc.Ellipse(x5 - 3, y5 + (y6-y5) / 2 - 3, x5 + 3, y5 + (y6-y5) / 2 + 3);
+	dc.Ellipse(x5 + (x6-x5) / 2 - 3, y6 - 3, x5 + (x6-x5) / 2 + 3, y6 + 3);
+
+	dc.Ellipse((int)(x0 + radius * cos(45*PI/180.0))-3, (int)(y0 - radius * sin(45*PI/180.0))-3, (int)(x0 + radius * cos(45*PI/180.0))+3, (int)(y0 - radius * sin(45*PI/180.0))+3);
+	dc.Ellipse((int)(x0 + radius * cos(45*PI/180.0))-3, (int)(y0 + radius * sin(45*PI/180.0))-3, (int)(x0 + radius * cos(45*PI/180.0))+3, (int)(y0 + radius * sin(45*PI/180.0))+3);
+	dc.Ellipse((int)(x0 - radius * cos(45*PI/180.0))-3, (int)(y0 + radius * sin(45*PI/180.0))-3, (int)(x0 - radius * cos(45*PI/180.0))+3, (int)(y0 + radius * sin(45*PI/180.0))+3);
+	dc.Ellipse((int)(x0 - radius * cos(45*PI/180.0))-3, (int)(y0 - radius * sin(45*PI/180.0))-3, (int)(x0 - radius * cos(45*PI/180.0))+3, (int)(y0 - radius * sin(45*PI/180.0)) + 3);
+
+	dc.SelectObject(&pOldBrush);
+
+	//定义画刷颜色，红色中心小圆及三角箭头
+	CBrush brushRed(RGB(255, 0, 0));
+	pOldBrush = dc.SelectObject(&brushRed);
+
+	//圆盘中心的小圆
+	int x7 = x5+(x6-x5)/2-5;
+	int y7 = y5+(y6-y5)/2-5;
+	int x8 = x5+(x6-x5)/2+5;
+	int y8 = y5+(y6-y5)/2+5;
+
+	dc.Ellipse(x7,y7,x8,y8);//(x1,y1),(x2,y2)为包围圆型的矩形的左上角和右下角的坐标
+
+	dc.SelectObject(&pOldBrush);
+
+	CPen hPenGreen;
+	hPenGreen.CreatePen(PS_SOLID,1,RGB(0,255,0));//这行定义CPEN的颜色，修改RGB的值，绿色十字线
+	CPen *pOldPen = dc.SelectObject(&hPenGreen);
+	//圆盘中间的两天县
+	dc.MoveTo(x5+40, y5+(y6-y5)/2);
+	dc.LineTo(x6-40, y5+(y6-y5)/2);
+
+	dc.MoveTo(x5+(x6-x5)/2, y5+40);
+	dc.LineTo(x5+(x6-x5)/2, y6-40);
+
+
+	dc.SelectObject(pOldPen);
+
+}
+void CSerialTestMFCDialogDlg::DrawAnglePitch( CPaintDC &dc, CRect rt )
+{
+	//创建横矩形框
+	dc.Rectangle(&rt);
+
+	//横矩形框画线
+	for(int i=1;i<lineCount;i++)
+	{
+		dc.MoveTo(x1+space*i, y1);
+		dc.LineTo(x1+space*i, y2);
+	}
+	//完成横矩形框画线
+
+	//横框数值标识
+	int nLeft = x1 - 10;
+	int nTop = y2 + 5;
+	for( int i = 0; i <= lineCount; i +=3 )
+	{
+		CString strAngle ;
+		strAngle.Format( _T("%3d"), -90+i*10 );
+
+		dc.TextOut(nLeft + i*space, nTop, strAngle );
+	}
+
+}
+void CSerialTestMFCDialogDlg::DrawAngleRoll( CPaintDC &dc, CRect rt )
+{
+	//创建竖矩形框
+	dc.Rectangle(&rt);
+
+	//横矩形框画线
+	//int space = 20;//10度为一格；若5度为1格，修改此值为10
+	//int lineCount = (y4 - y3) / space;
+
+	//竖矩形框画线
+	for(int i=1;i<lineCount;i++)
+	{
+		dc.MoveTo(x3, y3+space*i);
+		dc.LineTo(x4, y3+space*i);
+	}
+	//完成竖矩形框画线
+
+	//竖框数值标识
+	int nLeft = x3 - 25;
+	int nTop = y3 - 5;
+	for( int i = 0; i <= lineCount; i +=3 )
+	{
+		CString strAngle ;
+		strAngle.Format( _T("%3d"), 90-i*10 );
+
+		dc.TextOut(nLeft, nTop + i*space, strAngle );
+	}
+
+}
+void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pitch, float roll )
+{
+	float tilt = pitch;
+	float tiltSrc1 = roll;
+	float yawSrc1 = yaw;
+
+	//定义画刷颜色，红色三角箭头
+	CBrush brushRed(RGB(255, 0, 0));
+	CBrush* pOldBrush = dc.SelectObject(&brushRed);
+
+	//横框指示箭头，pitch 
+	CPoint pts[3];
+	pts[0].x = x1 + space * (lineCount / 2) - 10 + tilt * (space / 10);//10度一分隔
+	pts[0].y = y1 - 15;
+
+	pts[1].x = x1 + space * (lineCount / 2) + 10 + tilt * (space / 10);
+	pts[1].y = y1 - 15;
+
+	pts[2].x = x1 + space * (lineCount / 2) + tilt * (space / 10);
+	pts[2].y = y1;
+
+	dc.Polygon(pts, 3);
+
+	//竖框指示箭头，roll 
+	CPoint pts2[3];
+
+	pts2[0].x = x4;//10度一分隔
+	pts2[0].y = y3 + space * (lineCount / 2) - tiltSrc1 * (space / 10);
+
+	pts2[1].x = x4 + 15;
+	pts2[1].y = y3 + space * (lineCount / 2) - 10 - tiltSrc1 * (space / 10);
+
+	pts2[2].x = x4 + 15;
+	pts2[2].y = y3 + space * (lineCount / 2) + 10 - tiltSrc1 * (space / 10);
+
+	dc.Polygon(pts2, 3);
+
+
+	//圆指示箭头，yaw 
+	CPoint pts3[3];
+
+	if(yawSrc1 == 0.0f)
+	{
+		xYawSrc = x5+(x6-x5)/2;
+		yYawSrc = y5;
+	} 
+	else 
+	{
+		float yawSrcRadian = 0.0f;
+		//if(0.0<yawSrc1<90.0)
+		if((yawSrc1>0.0) &&(yawSrc1-90.0)<0.0)
+		{
+			//弧度
+			yawSrcRadian = yawSrc1 * PI / 180.0f;
+			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
+			xYawSrc = (int)(x0 + radius * sin(yawSrcRadian));
+			yYawSrc = (int)(y0 - radius * cos(yawSrcRadian));
+		}
+
+		else if((yawSrc1-90.0)>0.0 && (yawSrc1-180.0)<0.0)
+		{
+			//弧度
+			yawSrcRadian = (yawSrc1-90) * PI / 180.0f;
+			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
+			xYawSrc = (int)(x0 + radius * cos(yawSrcRadian));
+			yYawSrc = (int)(y0 + radius * sin(yawSrcRadian));
+		}
+
+		else if((yawSrc1-180.0)>0.0 && (yawSrc1-270.0)<0.0)
+		{
+			//弧度
+			yawSrcRadian = (yawSrc1-180) * PI / 180.0f;
+			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
+			xYawSrc = (int)(x0 - radius * cos(yawSrcRadian));
+			yYawSrc = (int)(y0 + radius * sin(yawSrcRadian));
+		}
+
+		else if((yawSrc1-270.0)>0.0 && (yawSrc1-360.0)<0.0)
+		{
+			//弧度
+			yawSrcRadian = (yawSrc1-270) * PI / 180.0f;
+			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
+			xYawSrc = (int)(x0 - radius * cos(yawSrcRadian));
+			yYawSrc = (int)(y0 - radius * sin(yawSrcRadian));
+		}
+
+	}
+
+	pts3[0].x = xYawSrc - 10;
+	pts3[0].y = yYawSrc -15;
+
+	pts3[1].x = xYawSrc + 10;
+	pts3[1].y = yYawSrc -15;
+
+	pts3[2].x = xYawSrc;
+	pts3[2].y = yYawSrc;
+
+	dc.Polygon(pts3, 3);
+
+	//根据实际角度画线
+	CPen hPenGreen;
+	hPenGreen.CreatePen(PS_SOLID,1,RGB(0,255,0));//这行定义CPEN的颜色，修改RGB的值，绿色十字线
+	CPen *pOldPen = dc.SelectObject(&hPenGreen);
+	dc.MoveTo(x0, y0);
+	dc.LineTo(xYawSrc, yYawSrc);
+	dc.SelectObject(pOldPen);
+
+}
+
+void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
+{
+
+
+	CPen hPenBlack;
+	hPenBlack.CreatePen(PS_SOLID,1,RGB(0,0,0));//这行定义CPEN的颜色，修改RGB的值,设置线条颜色
+
+	CPen* oldPen = dc.SelectObject(&hPenBlack);
+	//dc.SetViewportOrg(200, 130);//移动原点
+	dc.SetTextColor(RGB(0,0,255));//设置字体颜色为蓝色
+
+	CFont font;
+	font.CreatePointFont(80, _T("宋体"), NULL);
+	CFont *pOldFont=dc.SelectObject(&font);
+
+	// 设置面/区域颜色，透明无色
+	CBrush* pOldBrush = (CBrush*)dc.SelectStockObject(NULL_BRUSH);  
+
+	DrawAngleYaw( dc, rect[0] );
+
+	dc.SelectObject(pOldBrush);
+
+	pOldBrush = (CBrush*)dc.SelectStockObject(NULL_BRUSH); 
+
+	DrawAnglePitch( dc, rect[1] );
+
+	DrawAngleRoll( dc, rect[2] );
+
+	dc.SelectObject(oldPen);
+	dc.SelectObject(pOldFont);
+
 }
