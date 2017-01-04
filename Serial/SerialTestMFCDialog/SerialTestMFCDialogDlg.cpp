@@ -14,7 +14,14 @@
 #include "Serial.h"
 
 #define PI 3.1415926
+#define FILE_NAME_COMPASS	("./res/compass-ruler.png")
 
+#define	ENABLE_GDI_PLUS	1
+
+#if	ENABLE_GDI_PLUS
+using namespace Gdiplus;
+#pragma comment(lib, "gdiplus.lib")
+#endif
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -64,8 +71,19 @@ CSerialTestMFCDialogDlg::CSerialTestMFCDialogDlg(CWnd* pParent /*=NULL*/)
 	, m_strGPSPositionZ(_T(""))
 	, m_strGPSAngle(_T(""))
 	, m_strGroupBoxCom1ST(_T(""))
+	, gdi_image(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+CSerialTestMFCDialogDlg::~CSerialTestMFCDialogDlg()
+{
+#if	ENABLE_GDI_PLUS	
+	if ( gdi_image)
+		delete gdi_image ;
+
+	GdiplusShutdown(m_gdiplusToken);
+#endif
 }
 
 void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
@@ -134,8 +152,14 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	UpdateData( FALSE );
 
 	// 图片控件 透明 
-	LoadImg( image, CString("./res/compass-ruler.png") );
+	LoadImg( image, CString(FILE_NAME_COMPASS) );
 
+#if	ENABLE_GDI_PLUS
+	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
+	gdi_image = Gdiplus::Image::FromFile( L"./res/compass-ruler.png");
+#endif
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -556,6 +580,22 @@ void CSerialTestMFCDialogDlg::drawImage( float m_iAngle )
 	pDC = pWnd->GetDC();
 	hDc = pDC->m_hDC;	
 	pWnd->GetClientRect(&rectCompass);	//取得客户区尺寸
+
+#if	ENABLE_GDI_PLUS
+	Graphics     graphics(hDc);
+
+	Gdiplus::Matrix matrix;
+	CPoint	pt = rectCompass.CenterPoint();
+	Gdiplus::PointF P( pt.x, pt.y );             // 旋转中心
+	matrix.RotateAt( - m_iAngle, P);            // 旋转角度，如100°
+	graphics.SetTransform(&matrix);
+
+	graphics.SetSmoothingMode(SmoothingModeHighQuality);
+
+	graphics.DrawImage( gdi_image, 0, 0, rectCompass.Width(), rectCompass.Height());
+
+#else
+
 	pDC->SetStretchBltMode(STRETCH_HALFTONE);	//保持图片不失真
 
 
@@ -565,6 +605,7 @@ void CSerialTestMFCDialogDlg::drawImage( float m_iAngle )
 	ReleaseDC( pDC );
 
 	restoreControlRotation(m_iAngle);
+#endif
 }
 
 void CSerialTestMFCDialogDlg::DrawAngleYaw( CPaintDC &dc, CRect rt )

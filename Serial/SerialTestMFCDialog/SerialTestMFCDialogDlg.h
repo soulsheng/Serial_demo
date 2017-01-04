@@ -12,12 +12,15 @@
 #include <deque>
 #include <string>
 
+#include <gdiplus.h>
+
 // CSerialTestMFCDialogDlg 对话框
 class CSerialTestMFCDialogDlg : public CDialogEx
 {
 // 构造
 public:
 	CSerialTestMFCDialogDlg(CWnd* pParent = NULL);	// 标准构造函数
+	~CSerialTestMFCDialogDlg();
 
 // 对话框数据
 	enum { IDD = IDD_SERIALTESTMFCDIALOG_DIALOG };
@@ -105,4 +108,6 @@ public:
 	float		x0, y0, radius;	// center(x0, y0) radius of circle for yaw 
 	int			xYawSrc, yYawSrc;
 
+	ULONG_PTR           m_gdiplusToken;
+	Gdiplus::Image		*gdi_image;
 };
