@@ -161,6 +161,12 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	gdi_image = Gdiplus::Image::FromFile( FILE_NAME_COMPASS );
 #endif
 
+	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
+	pDC = pWnd->GetDC();
+	hDc = pDC->m_hDC;	
+	pWnd->GetWindowRect(&rectCompass);	//取得客户区尺寸
+	ScreenToClient(&rectCompass);
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -576,16 +582,11 @@ void CSerialTestMFCDialogDlg::restoreControlRotation( float m_iAngle )
 void CSerialTestMFCDialogDlg::drawImage( float m_iAngle )
 {
 	// draw image 
-	CWnd *pWnd = GetDlgItem(IDC_STATIC_COMPASS);
-	pDC = pWnd->GetDC();
-	hDc = pDC->m_hDC;	
-	pWnd->GetClientRect(&rectCompass);	//取得客户区尺寸
-
 #if	ENABLE_GDI_PLUS
 	Graphics     graphics(hDc);
 
 	Gdiplus::Matrix matrix;
-	CPoint	pt = rectCompass.CenterPoint();
+	CPoint	pt = rectCompass.CenterPoint() - rectCompass.TopLeft();
 	Gdiplus::PointF P( pt.x, pt.y );             // 旋转中心
 	matrix.RotateAt( - m_iAngle, P);            // 旋转角度，如100°
 	graphics.SetTransform(&matrix);
@@ -768,7 +769,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 
 	dc.Polygon(pts2, 3);
 
-#if 1
+#if 0
 	//圆指示箭头，yaw 保持不动，中间图片反方向旋转 
 	xYawSrc = x5+(x6-x5)/2;
 	yYawSrc = y5;
@@ -783,78 +784,17 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 
 	pts3[2].x = xYawSrc;
 	pts3[2].y = yYawSrc;
-
-	dc.Polygon(pts3, 3);
 #else
-	//圆指示箭头，yaw 
-	CPoint pts3[3];
+	CPoint	ptCenter = rectCompass.CenterPoint();
+	CSize	ptSize = rectCompass.Size();
+	CPoint  pts3[3];
 
-	if(yawSrc1 == 0.0f)
-	{
-		xYawSrc = x5+(x6-x5)/2;
-		yYawSrc = y5;
-	} 
-	else 
-	{
-		float yawSrcRadian = 0.0f;
-		//if(0.0<yawSrc1<90.0)
-		if((yawSrc1>0.0) &&(yawSrc1-90.0)<0.0)
-		{
-			//弧度
-			yawSrcRadian = yawSrc1 * PI / 180.0f;
-			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
-			xYawSrc = (int)(x0 + radius * sin(yawSrcRadian));
-			yYawSrc = (int)(y0 - radius * cos(yawSrcRadian));
-		}
-
-		else if((yawSrc1-90.0)>0.0 && (yawSrc1-180.0)<0.0)
-		{
-			//弧度
-			yawSrcRadian = (yawSrc1-90) * PI / 180.0f;
-			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
-			xYawSrc = (int)(x0 + radius * cos(yawSrcRadian));
-			yYawSrc = (int)(y0 + radius * sin(yawSrcRadian));
-		}
-
-		else if((yawSrc1-180.0)>0.0 && (yawSrc1-270.0)<0.0)
-		{
-			//弧度
-			yawSrcRadian = (yawSrc1-180) * PI / 180.0f;
-			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
-			xYawSrc = (int)(x0 - radius * cos(yawSrcRadian));
-			yYawSrc = (int)(y0 + radius * sin(yawSrcRadian));
-		}
-
-		else if((yawSrc1-270.0)>0.0 && (yawSrc1-360.0)<0.0)
-		{
-			//弧度
-			yawSrcRadian = (yawSrc1-270) * PI / 180.0f;
-			//已知圆点坐标，半径和角度，求圆上任意点的坐标计算公式
-			xYawSrc = (int)(x0 - radius * cos(yawSrcRadian));
-			yYawSrc = (int)(y0 - radius * sin(yawSrcRadian));
-		}
-
-	}
-
-	pts3[0].x = xYawSrc - 10;
-	pts3[0].y = yYawSrc -15;
-
-	pts3[1].x = xYawSrc + 10;
-	pts3[1].y = yYawSrc -15;
-
-	pts3[2].x = xYawSrc;
-	pts3[2].y = yYawSrc;
-
+	pts3[0]  = ptCenter - CPoint( 0, ptSize.cy / 2 - 0 );
+	pts3[1]  = pts3[0] + CPoint( -10, -15 );
+	pts3[2]  = pts3[0] + CPoint(  10, -15 );
+#endif
 	dc.Polygon(pts3, 3);
 
-	//根据实际角度画线
-	CPen hPenGreen;
-	hPenGreen.CreatePen(PS_SOLID,1,RGB(0,255,0));//这行定义CPEN的颜色，修改RGB的值，绿色十字线
-	CPen *pOldPen = dc.SelectObject(&hPenGreen);
-	dc.MoveTo(x0, y0);
-	dc.LineTo(xYawSrc, yYawSrc);
-	dc.SelectObject(pOldPen);
-#endif
 }
 
 void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
