@@ -14,7 +14,7 @@
 #include "Serial.h"
 
 #define PI 3.1415926
-#define FILE_NAME_COMPASS	("./res/compass-ruler.png")
+#define FILE_NAME_COMPASS	(L"./res/compass-ruler.png")
 
 #define	ENABLE_GDI_PLUS	1
 
@@ -158,7 +158,7 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
-	gdi_image = Gdiplus::Image::FromFile( L"./res/compass-ruler.png");
+	gdi_image = Gdiplus::Image::FromFile( FILE_NAME_COMPASS );
 #endif
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
