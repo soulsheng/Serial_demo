@@ -16,6 +16,8 @@
 #define PI 3.1415926
 #define FILE_NAME_COMPASS	(L"./res/compass-ruler.png")
 
+#define DIALOG_BKGND_COLOR RGB(247, 250, 253)
+
 #define	ENABLE_GDI_PLUS	1
 
 #if	ENABLE_GDI_PLUS
@@ -100,6 +102,7 @@ void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STATI_GPS_POSITIONZ, m_strGPSPositionZ);
 	DDX_Text(pDX, IDC_STATIC_GPS_ANGLE, m_strGPSAngle);
 	DDX_Text(pDX, IDC_GROUP_BOX_COM_1ST, m_strGroupBoxCom1ST);
+	DDX_Control(pDX, IDC_SLIDER1, m_sliderCtrlHor);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -166,6 +169,8 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	hDc = pDC->m_hDC;	
 	pWnd->GetWindowRect(&rectCompass);	//取得客户区尺寸
 	ScreenToClient(&rectCompass);
+
+	m_sliderCtrlHor.SetBkgndColor(DIALOG_BKGND_COLOR);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

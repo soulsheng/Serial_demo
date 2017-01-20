@@ -13,6 +13,8 @@
 #include <string>
 
 #include <gdiplus.h>
+#include "afxcmn.h"
+#include "CAdobeSliderCtrl.h"
 
 // CSerialTestMFCDialogDlg 对话框
 class CSerialTestMFCDialogDlg : public CDialogEx
@@ -110,4 +112,6 @@ public:
 
 	ULONG_PTR           m_gdiplusToken;
 	Gdiplus::Image		*gdi_image;
+	// 水平刻度
+	CAdobeSliderCtrl m_sliderCtrlHor;
 };

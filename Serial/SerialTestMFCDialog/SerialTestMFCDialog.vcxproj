@@ -157,6 +157,7 @@
     <ClInclude Include="..\common\helper_timer.h" />
     <ClInclude Include="..\common\StringParser.h" />
     <ClInclude Include="..\common\vgkStringUtility.h" />
+    <ClInclude Include="CAdobeSliderCtrl.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SerialTestMFCDialog.h" />
     <ClInclude Include="SerialTestMFCDialogDlg.h" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="..\common\StringParser.cpp" />
     <ClCompile Include="..\common\vgkStringUtility.cpp" />
+    <ClCompile Include="CAdobeSliderCtrl.cpp" />
     <ClCompile Include="SerialTestMFCDialog.cpp" />
     <ClCompile Include="SerialTestMFCDialogDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
