@@ -307,25 +307,16 @@ void CSerialTestMFCDialogDlg::DisplayData( LPCTSTR pszData )
 	
 
 	{
-		pStrVec = m_parser.getStringVectorPosition( );
-		if( pStrVec->size() >= 9 )
+		pStrVec = m_parser.getStringVector( );
+		if( pStrVec->size() >= 6 )
 		{
-			m_strGPSPositionX = (*pStrVec)[1].c_str() ;		m_strGPSPositionX += " ";
-			m_strGPSPositionX += (*pStrVec)[2].c_str() ;
-			m_strGPSPositionZ = (*pStrVec)[3].c_str() ;		m_strGPSPositionZ += " ";
-			m_strGPSPositionZ += (*pStrVec)[4].c_str() ;
-			m_strGPSPositionY = (*pStrVec)[8].c_str() ;
-		}
-	}
+			m_strGPSPositionX = (*pStrVec)[3].c_str() ;	
+			m_strGPSPositionZ = (*pStrVec)[4].c_str() ;	
+			m_strGPSPositionY = (*pStrVec)[5].c_str() ;
 
-
-	{
-		pStrVec = m_parser.getStringVectorAngle( );
-		if( pStrVec->size() >= 8 )
-		{
-			m_strGPSAngle = (*pStrVec)[1].c_str() ;		m_strGPSAngle += ", ";
-			m_strGPSAngle += (*pStrVec)[3].c_str() ;	m_strGPSAngle += ", ";
-			m_strGPSAngle += (*pStrVec)[7].c_str() ;
+			m_strGPSAngle = (*pStrVec)[0].c_str() ;		m_strGPSAngle += ", ";
+			m_strGPSAngle += (*pStrVec)[1].c_str() ;	m_strGPSAngle += ", ";
+			m_strGPSAngle += (*pStrVec)[2].c_str() ;
 		}
 	}
 

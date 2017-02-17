@@ -13,12 +13,26 @@ enum FRAME_TYPE
 	FRAME_NULL
 };
 
+enum FRAME_ITEM
+{
+	YAW,
+	TILT,
+	ROLL,
+	LATITUDE,
+	LONGITUDE,
+	ALTITUDE,
+	ITEM_COUNT
+};
+
 class	StringParserDIY
 {
 protected:
-	float	m_fAngle[3];
-	double	m_fPosition[3];
-	char	m_cDirection[2];
+	//float	m_fAngle[3];
+	//double	m_fPosition[3];
+	//char	m_cDirection[2];
+	float	m_fFrameItem[ITEM_COUNT];
+	std::vector<std::string>	m_sFrameItem;
+	std::vector<std::string>	m_sFrameItemValue;
 
 	std::string		strCurrentFrame;	// string current frame
 	bool	m_bFrameValid[2];	// position or angle frame is valid or not
@@ -38,8 +52,8 @@ public:
 	int		parseValueFromString( std::string& str );
 	double*	getPosition(char *pDir);
 	float*	getAngle();
-	StringVector*	getStringVectorPosition();
-	StringVector*	getStringVectorAngle();
+	StringVector*	getStringVector();
+
 	FRAME_TYPE		getFrameType();
 	bool			isFrameValid();
 	std::string		formatCurrentFrameToString();
