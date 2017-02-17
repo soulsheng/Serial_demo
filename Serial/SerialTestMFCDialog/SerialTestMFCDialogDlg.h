@@ -113,5 +113,5 @@ public:
 	ULONG_PTR           m_gdiplusToken;
 	Gdiplus::Image		*gdi_image;
 	// Ë®Æ½¿Ì¶È
-	CAdobeSliderCtrl m_sliderCtrlHor;
+	//CAdobeSliderCtrl m_sliderCtrlHor;
 };

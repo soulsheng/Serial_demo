@@ -102,7 +102,7 @@ void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STATI_GPS_POSITIONZ, m_strGPSPositionZ);
 	DDX_Text(pDX, IDC_STATIC_GPS_ANGLE, m_strGPSAngle);
 	DDX_Text(pDX, IDC_GROUP_BOX_COM_1ST, m_strGroupBoxCom1ST);
-	DDX_Control(pDX, IDC_SLIDER1, m_sliderCtrlHor);
+	//DDX_Control(pDX, IDC_SLIDER1, m_sliderCtrlHor);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -170,7 +170,11 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	pWnd->GetWindowRect(&rectCompass);	//取得客户区尺寸
 	ScreenToClient(&rectCompass);
 
-	m_sliderCtrlHor.SetBkgndColor(DIALOG_BKGND_COLOR);
+	//m_sliderCtrlHor.SetBkgndColor(DIALOG_BKGND_COLOR);
+	//设置滑块的位置的最大值和最小值 
+	//m_sliderCtrlHor.SetRange(-90, 90); 
+	//设置滑块的当前位置 
+	//m_sliderCtrlHor.SetPos(0);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
