@@ -16,6 +16,16 @@
 #define PI 3.1415926
 #define FILE_NAME_COMPASS	(L"./res/compass-ruler.png")
 
+#define	STRING_FRAME_TEST	"start\r\n\
+yaw:1.111111\r\n\
+tilt:2.222222\r\n\
+roll:3.333333\r\n\
+latitude:4.444444\r\n\
+longitude:5.555555\r\n\
+altitude:6.666666\r\n\
+end\r\n"
+#define USE_STRING_TEST		1
+
 #define DIALOG_BKGND_COLOR RGB(247, 250, 253)
 
 #define	ENABLE_GDI_PLUS	1
@@ -462,7 +472,9 @@ LRESULT CSerialTestMFCDialogDlg::OnSerialMsg( WPARAM wParam, LPARAM lParam )
 			DisplayData("\n\n\n");
 
 		std::string strFrameCurrent;
-
+#if USE_STRING_TEST
+		m_strFrame = STRING_FRAME_TEST ;
+#endif		
 		if ( m_parser.isFrameComplete(m_strFrame) )
 		{
 			int nRet = m_parser.parseValueFromString( m_strFrame );

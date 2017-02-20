@@ -45,7 +45,7 @@ std::string StringParserDIY::formatCurrentFrameToString()
 
 	char buf[256];
 
-	std::sprintf(buf, "position(%.8lf,%.8lf,%.3f) \n", 
+	std::sprintf(buf, "position(%.6f,%.6f,%.6f) \n", 
 		m_fFrameItem[0+3],  m_fFrameItem[1+3], m_fFrameItem[2+3] );
 
 	str = buf;
@@ -54,6 +54,8 @@ std::string StringParserDIY::formatCurrentFrameToString()
 		m_fFrameItem[0],  m_fFrameItem[1], m_fFrameItem[2] );
 
 	str += buf;
+
+	m_bFrameTypeCurrent = FRAME_MIX;
 
 	return str;
 }
@@ -82,10 +84,10 @@ void StringParserDIY::parseValueFromString( )
 
 		if( nIndexFindBegin == -1 )
 			return;
-	
+		nIndexFindBegin += m_sFrameItem[i].size() + 1;
 		int nIndexFindEnd = str.find("\r\n", nIndexFindBegin);
 
-		std::string strSub = str.substr( nIndexFindBegin + m_sFrameItem[i].size() + 1, nIndexFindEnd );
+		std::string strSub = str.substr( nIndexFindBegin, nIndexFindEnd - nIndexFindBegin );
 
 		m_fFrameItem[i] = atof( strSub.c_str() );
 	
