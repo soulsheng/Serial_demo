@@ -6,7 +6,7 @@
 #include "afxwin.h"
 
 #include "SerialMFC.h"
-#include "StringParserStart.h"
+#include "StringParserPos.h"
 #include "helper_timer.h"
 
 #include <deque>
@@ -73,7 +73,7 @@ public:
 	CSerialMFC		m_serial;
 	CString			m_strPort;		// com port string, eg. COM3
 	std::deque<std::string>		m_lineBuffer;
-	StringParserStart	m_parser;
+	StringParserPos	m_parser;
 	bool			m_bStartRead;	// start to read or not 
 
 	CString m_strGPSPositionX;

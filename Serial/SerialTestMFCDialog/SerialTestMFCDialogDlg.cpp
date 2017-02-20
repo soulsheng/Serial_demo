@@ -16,6 +16,7 @@
 #define PI 3.1415926
 #define FILE_NAME_COMPASS	(L"./res/compass-ruler.png")
 
+#if 0
 #define	STRING_FRAME_TEST	"start\r\n\
 yaw:1.111111\r\n\
 tilt:2.222222\r\n\
@@ -24,6 +25,10 @@ latitude:4.444444\r\n\
 longitude:5.555555\r\n\
 altitude:6.666666\r\n\
 end\r\n"
+#endif 
+//$POS,Yaw，方位角，Tilt，俯仰角，roll，横滚角，维度，经度，高度
+#define	STRING_FRAME_TEST	"$POS,Yaw,200,Tilt,42,roll,0,37.56245,120.3527,0,0,0\r\n"
+
 #define USE_STRING_TEST		1
 
 #define DIALOG_BKGND_COLOR RGB(247, 250, 253)

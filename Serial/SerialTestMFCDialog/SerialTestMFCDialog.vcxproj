@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="..\common\helper_timer.h" />
     <ClInclude Include="..\common\StringParser.h" />
+    <ClInclude Include="..\common\StringParserPos.h" />
     <ClInclude Include="..\common\StringParserStart.h" />
     <ClInclude Include="..\common\vgkStringUtility.h" />
     <ClInclude Include="CAdobeSliderCtrl.h" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\StringParser.cpp" />
+    <ClCompile Include="..\common\StringParserPos.cpp" />
     <ClCompile Include="..\common\StringParserStart.cpp" />
     <ClCompile Include="..\common\vgkStringUtility.cpp" />
     <ClCompile Include="CAdobeSliderCtrl.cpp" />
