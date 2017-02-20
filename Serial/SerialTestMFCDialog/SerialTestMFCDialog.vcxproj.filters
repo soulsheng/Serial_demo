@@ -54,7 +54,7 @@
     <ClInclude Include="CAdobeSliderCtrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\StringParserDIY.h">
+    <ClInclude Include="..\common\StringParserStart.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,7 +77,7 @@
     <ClCompile Include="CAdobeSliderCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\StringParserDIY.cpp">
+    <ClCompile Include="..\common\StringParserStart.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

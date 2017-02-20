@@ -1,10 +1,10 @@
 
 #include "StdAfx.h"
-#include "StringParserDIY.h"
+#include "StringParserStart.h"
 
 #define		FRAME_SIZE		151
 
-StringParserDIY::StringParserDIY()
+StringParserStart::StringParserStart()
 {
 	m_bFrameValid[0] = false;
 	m_bFrameValid[1] = false;
@@ -18,27 +18,27 @@ StringParserDIY::StringParserDIY()
 
 
 
-float* StringParserDIY::getAngle()
+float* StringParserStart::getAngle()
 {
 	return m_fFrameItem;
 }
 
-vgKernel::StringVector* StringParserDIY::getStringVector()
+vgKernel::StringVector* StringParserStart::getStringVector()
 {
 	return &m_sFrameItemValue;
 }
 
-FRAME_TYPE StringParserDIY::getFrameType()
+FRAME_TYPE StringParserStart::getFrameType()
 {
 	return m_bFrameTypeCurrent;
 }
 
-bool StringParserDIY::isFrameValid()
+bool StringParserStart::isFrameValid()
 {
 	return m_bFrameTypeCurrent != FRAME_NULL;
 }
 
-std::string StringParserDIY::formatCurrentFrameToString()
+std::string StringParserStart::formatCurrentFrameToString()
 {
 	// format frame value back to string
 	std::string str;
@@ -60,7 +60,7 @@ std::string StringParserDIY::formatCurrentFrameToString()
 	return str;
 }
 
-void StringParserDIY::setDefault()
+void StringParserStart::setDefault()
 {
 	m_sFrameItem.push_back( "yaw" );
 	m_sFrameItem.push_back( "tilt" );
@@ -73,7 +73,7 @@ void StringParserDIY::setDefault()
 }
 
 
-void StringParserDIY::parseValueFromString( )
+void StringParserStart::parseValueFromString( )
 {
 	std::string str = strCurrentFrame;
 
@@ -99,7 +99,7 @@ void StringParserDIY::parseValueFromString( )
 
 }
 
-int StringParserDIY::parseValueFromString( std::string& str )
+int StringParserStart::parseValueFromString( std::string& str )
 {
 	int nBegin = str.find("start");
 
@@ -118,7 +118,7 @@ int StringParserDIY::parseValueFromString( std::string& str )
 	return nBegin;
 }
 
-bool StringParserDIY::isFrameComplete( std::string& str )
+bool StringParserStart::isFrameComplete( std::string& str )
 {
 	int nBegin = str.find("start");
 

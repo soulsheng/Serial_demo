@@ -25,7 +25,7 @@ enum FRAME_ITEM
 	ITEM_COUNT
 };
 
-class	StringParserDIY
+class	StringParserStart
 {
 protected:
 	//float	m_fAngle[3];
@@ -49,7 +49,7 @@ protected:
 	void setDefault();
 
 public:
-	StringParserDIY();
+	StringParserStart();
 	int		parseValueFromString( std::string& str );
 	double*	getPosition(char *pDir);
 	float*	getAngle();
