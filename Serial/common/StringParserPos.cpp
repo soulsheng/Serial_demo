@@ -81,8 +81,10 @@ void StringParserPos::parseValueFromString( )
 	m_strVecAngle.clear();
 
 	m_strVecAngle = StringUtility::tokenize( strCurrentFrame, "," );
-	if( m_strVecAngle.size() >= 12 )
+	if( m_strVecAngle.size() >= 10 )
 	{
+		m_sFrameItemValue.clear();
+		
 		m_fFrameItem[YAW] = atof( m_strVecAngle[2].c_str() );
 		m_fFrameItem[TILT] = atof( m_strVecAngle[4].c_str() );
 		m_fFrameItem[ROLL] = atof( m_strVecAngle[6].c_str() );
@@ -113,7 +115,7 @@ int StringParserPos::parseValueFromString( std::string& str )
 
 	parseValueFromString(  );
 
-	int nEnd = str.find(FRAME_STRING_END);
+	int nEnd = str.find(FRAME_STRING_END, nBegin);
 
 	str = str.substr( nEnd+1, std::string::npos );
 
@@ -129,7 +131,7 @@ bool StringParserPos::isFrameComplete( std::string& str )
 	if ( nBegin == -1 )
 		return false;
 
-	int nEnd = str.find(FRAME_STRING_END);
+	int nEnd = str.find(FRAME_STRING_END, nBegin);
 
 	if ( nEnd == -1 )
 		return false;
