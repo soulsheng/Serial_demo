@@ -89,17 +89,17 @@ void StringParserPos::parseValueFromString( )
 		m_fFrameItem[TILT] = atof( m_strVecAngle[4].c_str() );
 		m_fFrameItem[ROLL] = atof( m_strVecAngle[6].c_str() );
 
-		m_sFrameItemValue.push_back( m_strVecAngle[2].c_str() );
-		m_sFrameItemValue.push_back( m_strVecAngle[4].c_str() );
-		m_sFrameItemValue.push_back( m_strVecAngle[6].c_str() );
+		m_sFrameItemValue.push_back( m_strVecAngle[2].substr(0,6) );
+		m_sFrameItemValue.push_back( m_strVecAngle[4].substr(0,6) );
+		m_sFrameItemValue.push_back( m_strVecAngle[6].substr(0,6) );
 
 		m_fFrameItem[LATITUDE] = atof( m_strVecAngle[7].c_str() );
 		m_fFrameItem[LONGITUDE] = atof( m_strVecAngle[8].c_str() );
 		m_fFrameItem[ALTITUDE] = atof( m_strVecAngle[9].c_str() );
 
-		m_sFrameItemValue.push_back( m_strVecAngle[7].c_str() );
-		m_sFrameItemValue.push_back( m_strVecAngle[8].c_str() );
-		m_sFrameItemValue.push_back( m_strVecAngle[9].c_str() );
+		m_sFrameItemValue.push_back( m_strVecAngle[7].substr(0,10) );
+		m_sFrameItemValue.push_back( m_strVecAngle[8].substr(0,10) );
+		m_sFrameItemValue.push_back( m_strVecAngle[9].substr(0,10) );
 
 	}
 	

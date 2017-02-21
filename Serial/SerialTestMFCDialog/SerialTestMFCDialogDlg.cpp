@@ -27,9 +27,9 @@ altitude:6.666666\r\n\
 end\r\n"
 #endif 
 //$POS,Yaw，方位角，Tilt，俯仰角，roll，横滚角，维度，经度，高度
-#define	STRING_FRAME_TEST	"$POS,Yaw,200,Tilt,42,roll,0,37.56245,120.3527,0,0,0\r\n"
+#define	STRING_FRAME_TEST	"$POS,Yaw,200.000000,Tilt,42.000000,roll,0.000000,37.56245000,120.35270000,0.00000000,0,0\r\n"
 
-#define USE_STRING_TEST		1
+#define USE_STRING_TEST		0
 
 #define DIALOG_BKGND_COLOR RGB(247, 250, 253)
 
