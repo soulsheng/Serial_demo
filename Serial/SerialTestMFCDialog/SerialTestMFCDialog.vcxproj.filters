@@ -57,6 +57,12 @@
     <ClInclude Include="..\common\StringParserPos.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\RulerWnd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\MemDC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SerialTestMFCDialog.cpp">
@@ -78,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\StringParserPos.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\RulerWnd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

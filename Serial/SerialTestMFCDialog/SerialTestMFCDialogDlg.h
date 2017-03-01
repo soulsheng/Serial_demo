@@ -14,6 +14,7 @@
 
 #include <gdiplus.h>
 #include "afxcmn.h"
+#include "RulerWnd.h"	// Added by ClassView
 
 // CSerialTestMFCDialogDlg 对话框
 class CSerialTestMFCDialogDlg : public CDialogEx
@@ -113,4 +114,7 @@ public:
 	Gdiplus::Image		*gdi_image;
 	// 水平刻度
 	//CAdobeSliderCtrl m_sliderCtrlHor;
+
+
+	CRulerWnd m_HRuler;
 };

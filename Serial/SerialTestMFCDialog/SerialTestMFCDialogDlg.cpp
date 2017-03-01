@@ -118,6 +118,7 @@ void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_STATIC_GPS_ANGLE, m_strGPSAngle);
 	DDX_Text(pDX, IDC_GROUP_BOX_COM_1ST, m_strGroupBoxCom1ST);
 	//DDX_Control(pDX, IDC_SLIDER1, m_sliderCtrlHor);
+	DDX_Control(pDX, IDC_HRULER, m_HRuler);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -190,6 +191,14 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	//m_sliderCtrlHor.SetRange(-90, 90); 
 	//设置滑块的当前位置 
 	//m_sliderCtrlHor.SetPos(0);
+
+	m_HRuler.SetMargin( 180 );
+	m_HRuler.SetBackGroundColor( RGB( 200 , 200 , 255 ) );
+	m_HRuler.SetSeperatorSize( 4 );
+	m_HRuler.SetMilimeterPixel( 2 );
+	m_HRuler.SetStyle( RWSTYLE_HORZ | RWSTYLE_BOTTOMALIGN );
+	m_HRuler.AddSeperator( 0   , 1 , 0 , NULL , RGB( 0 , 0 , 0 ) , RGB( 255 , 0 , 0 ) );
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }

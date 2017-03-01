@@ -155,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\helper_timer.h" />
+    <ClInclude Include="..\common\MemDC.h" />
+    <ClInclude Include="..\common\RulerWnd.h" />
     <ClInclude Include="..\common\StringParser.h" />
     <ClInclude Include="..\common\StringParserPos.h" />
     <ClInclude Include="..\common\StringParserStart.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\RulerWnd.cpp" />
     <ClCompile Include="..\common\StringParser.cpp" />
     <ClCompile Include="..\common\StringParserPos.cpp" />
     <ClCompile Include="..\common\StringParserStart.cpp" />
