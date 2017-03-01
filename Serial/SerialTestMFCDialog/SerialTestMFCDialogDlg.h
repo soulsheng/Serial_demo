@@ -117,4 +117,5 @@ public:
 
 
 	CRulerWnd m_HRuler;
+	CRulerWnd m_VRuler;
 };

@@ -119,6 +119,7 @@ void CSerialTestMFCDialogDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_GROUP_BOX_COM_1ST, m_strGroupBoxCom1ST);
 	//DDX_Control(pDX, IDC_SLIDER1, m_sliderCtrlHor);
 	DDX_Control(pDX, IDC_HRULER, m_HRuler);
+	DDX_Control(pDX, IDC_VRULER, m_VRuler);
 }
 
 BEGIN_MESSAGE_MAP(CSerialTestMFCDialogDlg, CDialogEx)
@@ -200,6 +201,13 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	m_HRuler.SetStyle( RWSTYLE_HORZ | RWSTYLE_BOTTOMALIGN );
 	m_HRuler.AddSeperator( 0   , 1 , 0 , NULL , RGB( 0 , 0 , 0 ) , RGB( 255 , 0 , 0 ) );
 
+	m_VRuler.SetMargin( 180 );
+	m_VRuler.SetOffsetDisplay( -90 );
+	m_VRuler.SetBackGroundColor( RGB( 200 , 200 , 255 ) );
+	m_VRuler.SetSeperatorSize( 4 );
+	m_VRuler.SetMilimeterPixel( 2 );
+	m_VRuler.SetStyle( RWSTYLE_VERT | RWSTYLE_BOTTOMALIGN );
+	m_VRuler.AddSeperator( 0   , 1 , 0 , NULL , RGB( 0 , 0 , 0 ) , RGB( 255 , 0 , 0 ) );
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -795,7 +803,8 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts2[2].x = x4 + 15;
 	pts2[2].y = y3 + space * (lineCount / 2) + 10 - tiltSrc1 * (space / 10.0f);
 
-	dc.Polygon(pts2, 3);
+	//dc.Polygon(pts2, 3);
+	m_VRuler.UpdateSeperator( 1, tiltSrc1/*-45*/ );
 
 #if 0
 	//圆指示箭头，yaw 保持不动，中间图片反方向旋转 
@@ -853,7 +862,7 @@ void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
 
 	//DrawAnglePitch( dc, rect[1] );
 
-	DrawAngleRoll( dc, rect[2] );
+	//DrawAngleRoll( dc, rect[2] );
 
 	dc.SelectObject(oldPen);
 	dc.SelectObject(pOldFont);

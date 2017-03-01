@@ -441,7 +441,7 @@ BOOL CRulerWnd::DrawVRuler(CDC *pDC)
 		else
 		   rectText.top    = iPos + 3;
 
-		str.Format( _T( "%ld" ) , iSayac / 10 );
+		str.Format( _T( "%ld" ) , -iSayac /*/ 10*/ - m_nOffsetDisplay );
 
 		pDC->TextOut( rectText.left , rectText.top  , str );
 
@@ -612,6 +612,8 @@ int CRulerWnd::UpdateSeperator( int iID, int iPos )
 	CRulerWnd::SEPERATOR_TYPE *pSep = GetSeperator( iID );
 	if( pSep )
 	{
+		if( m_dwStyle & RWSTYLE_VERT )
+			iPos *= -1;
 		pSep->iPos = iPos - m_nOffsetDisplay;
 		Invalidate();
 	}
