@@ -770,7 +770,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts[2].x = x1 + space * (lineCount / 2) + tilt * (space / 10.0f);
 	pts[2].y = y1;
 
-	dc.Polygon(pts, 3);
+	//dc.Polygon(pts, 3);
 
 	//Êú¿òÖ¸Ê¾¼ýÍ·£¬roll 
 	CPoint pts2[3];
@@ -840,7 +840,7 @@ void CSerialTestMFCDialogDlg::DrawCompassBackground( CPaintDC &dc )
 
 	pOldBrush = (CBrush*)dc.SelectStockObject(NULL_BRUSH); 
 
-	DrawAnglePitch( dc, rect[1] );
+	//DrawAnglePitch( dc, rect[1] );
 
 	DrawAngleRoll( dc, rect[2] );
 

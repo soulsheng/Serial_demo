@@ -51,9 +51,6 @@
     <ClInclude Include="..\common\helper_timer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CAdobeSliderCtrl.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\StringParserStart.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -75,9 +72,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\vgkStringUtility.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CAdobeSliderCtrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\common\StringParserStart.cpp">

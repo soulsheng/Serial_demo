@@ -14,7 +14,6 @@
 
 #include <gdiplus.h>
 #include "afxcmn.h"
-#include "CAdobeSliderCtrl.h"
 
 // CSerialTestMFCDialogDlg ¶Ô»°¿ò
 class CSerialTestMFCDialogDlg : public CDialogEx
