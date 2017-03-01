@@ -262,7 +262,7 @@ BOOL CRulerWnd::DrawHRuler(CDC *pDC)
         rectText.left     = iPos - 20;
   	    rectText.right    = iPos + 22;
 
-		str.Format( _T( "%ld" ) , iSayac / 10 );
+		str.Format( _T( "%ld" ) , iSayac /*/ 10*/ + m_nOffsetDisplay );
 
 		
 		pDC->DrawText( str , &rectText , DT_CENTER /*| DT_VCENTER | DT_SINGLELINE*/ );
@@ -607,6 +607,17 @@ CRulerWnd::AddSeperator( int iPos , int iID , int iType , LPARAM lParam , COLORR
 
 }
 								
+int CRulerWnd::UpdateSeperator( int iID, int iPos )
+{
+	CRulerWnd::SEPERATOR_TYPE *pSep = GetSeperator( iID );
+	if( pSep )
+	{
+		pSep->iPos = iPos - m_nOffsetDisplay;
+		Invalidate();
+	}
+	return 0;
+}
+
 BOOL CRulerWnd::DrawHSeperator( CDC *pDC , SEPERATOR_TYPE *pSep )
 {
 	
@@ -813,6 +824,11 @@ CRulerWnd::SetScrollPos( long lPos ) {
 }
 
 
+BOOL CRulerWnd::SetOffsetDisplay( long nOffset )
+{
+	m_nOffsetDisplay = nOffset;
+	return TRUE;
+}
 
 BOOL     
 CRulerWnd::SetMessageTarget( CWnd *pTarget ) {

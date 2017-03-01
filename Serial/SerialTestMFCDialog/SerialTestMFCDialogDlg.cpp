@@ -193,6 +193,7 @@ BOOL CSerialTestMFCDialogDlg::OnInitDialog()
 	//m_sliderCtrlHor.SetPos(0);
 
 	m_HRuler.SetMargin( 180 );
+	m_HRuler.SetOffsetDisplay( -90 );
 	m_HRuler.SetBackGroundColor( RGB( 200 , 200 , 255 ) );
 	m_HRuler.SetSeperatorSize( 4 );
 	m_HRuler.SetMilimeterPixel( 2 );
@@ -780,6 +781,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts[2].y = y1;
 
 	//dc.Polygon(pts, 3);
+	m_HRuler.UpdateSeperator( 1, -45 );
 
 	//Êú¿òÖ¸Ê¾¼ýÍ·£¬roll 
 	CPoint pts2[3];

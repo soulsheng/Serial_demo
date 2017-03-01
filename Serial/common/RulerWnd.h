@@ -93,6 +93,7 @@ public:
 	int DeleteSeperator( int iID );
 	int AddSeperator( int iPos , int iID , int iType = 0 , LPARAM lParam = NULL , COLORREF	clrLine = RGB( 0 , 0 , 0 ) , COLORREF clrFill = RGB( 255 ,255 , 220 ) , int iMinMargin = 0 , int iMaxMargin = 0xFFFFFFF );
 	
+	int UpdateSeperator( int iID, int iPos );
 
 	//Get Property
 	DWORD    GetStyle() { return m_dwStyle; }
@@ -105,6 +106,7 @@ public:
 	UINT     GetSeperatorSize() { return m_nSeperatorSize; }
 	long     GetScrollPos() { return m_lScrolPos; }
 	CWnd*	 GetMessageTarget() { return m_pMessageTarget; }
+	int      GetOffsetDisplay( ){ return m_nOffsetDisplay; }
 
 
 	//Set Property
@@ -118,6 +120,7 @@ public:
 	BOOL     SetSeperatorSize( UINT nSize );
 	BOOL     SetScrollPos( long lPos );
 	BOOL     SetMessageTarget( CWnd *pTarget = NULL );
+	BOOL     SetOffsetDisplay( long nOffset );
 
 
 // Overrides
@@ -156,6 +159,7 @@ protected:
 	UINT      m_nSeperatorSize;
 
 	long      m_lScrolPos;
+	int		  m_nOffsetDisplay;
 
 	CPtrArray m_Seperators;
 
