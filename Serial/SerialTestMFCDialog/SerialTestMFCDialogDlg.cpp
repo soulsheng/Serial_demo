@@ -781,7 +781,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts[2].y = y1;
 
 	//dc.Polygon(pts, 3);
-	m_HRuler.UpdateSeperator( 1, -45 );
+	m_HRuler.UpdateSeperator( 1, tilt/*-45*/ );
 
 	//Êú¿òÖ¸Ê¾¼ýÍ·£¬roll 
 	CPoint pts2[3];
