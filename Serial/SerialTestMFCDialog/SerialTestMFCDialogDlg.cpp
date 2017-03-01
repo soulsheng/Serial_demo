@@ -255,7 +255,7 @@ void CSerialTestMFCDialogDlg::OnPaint()
 		drawImage( m_fAngle[0] );
 
 		CPaintDC dc(this); // 用于绘制的设备上下文
-		DrawCompassBackground( dc );
+		//DrawCompassBackground( dc );
 		DrawAngleUpdate( dc, m_fAngle[0], m_fAngle[1], m_fAngle[2] );
 
 		CDialogEx::OnPaint();
@@ -769,6 +769,16 @@ void CSerialTestMFCDialogDlg::DrawAngleRoll( CPaintDC &dc, CRect rt )
 }
 void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pitch, float roll )
 {
+	char text[64];
+	_snprintf( text, sizeof(text), "pitch：%.2f", pitch );
+	GetDlgItem(IDC_LABLE_PITCH)->SetWindowText( text );
+
+	_snprintf( text, sizeof(text), "roll：%.2f", roll );
+	GetDlgItem(IDC_LABLE_ROLL)->SetWindowText( text );
+
+	_snprintf( text, sizeof(text), "yaw：%.2f", yaw );
+	GetDlgItem(IDC_LABLE_YAW)->SetWindowText( text );
+
 	float tilt = pitch;
 	float tiltSrc1 = roll;
 	float yawSrc1 = yaw;
