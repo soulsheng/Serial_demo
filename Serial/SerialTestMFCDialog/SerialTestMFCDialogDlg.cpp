@@ -799,7 +799,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts[2].y = y1;
 
 	//dc.Polygon(pts, 3);
-	m_HRuler.UpdateSeperator( 1, tilt/*-45*/ );
+	m_HRuler.UpdateSeperator( 1, tiltSrc1/*-45*/ );
 
 	//竖框指示箭头，roll 
 	CPoint pts2[3];
@@ -814,7 +814,7 @@ void CSerialTestMFCDialogDlg::DrawAngleUpdate( CPaintDC &dc, float yaw, float pi
 	pts2[2].y = y3 + space * (lineCount / 2) + 10 - tiltSrc1 * (space / 10.0f);
 
 	//dc.Polygon(pts2, 3);
-	m_VRuler.UpdateSeperator( 1, tiltSrc1/*-45*/ );
+	m_VRuler.UpdateSeperator( 1, tilt/*-45*/ );
 
 #if 0
 	//圆指示箭头，yaw 保持不动，中间图片反方向旋转 
